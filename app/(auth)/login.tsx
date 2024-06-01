@@ -1,0 +1,188 @@
+import React, { useState, useEffect } from "react";
+import {
+  Image,
+  View,
+  Text,
+  Dimensions,
+  TextInput,
+  KeyboardAvoidingView,
+  Pressable,
+  Alert,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { Text as ThemedText, View as ThemedView } from "@/components/Themed";
+import styles from "@/components/Styles";
+import Button from "@/components/Button";
+import Logo from "../../assets/images/client.png";
+import { Ionicons } from "@expo/vector-icons";
+import { useAuth } from "@/context/Auth";
+
+const Login = () => {
+  const [data, setData] = useState<any>(null);
+  const [code, setCode] = useState<string>("");
+  const [id, setId] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(true);
+
+  const { signIn } = useAuth();
+
+  // Mock fetchData function for demonstration
+  const fetchData = async (id: string) => {
+    try {
+      const response = await fetch(
+        "http://ctecg.co.za/ctecg_api/getCustomerData.php?customerid=" + id //2021
+      );
+      const jsonData = await response.json();
+      setData(jsonData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  const handleSignIn = (id: string) => {
+    fetchData(id);
+
+    if (data !== null && data.customer_details.error == "") {
+      if (code.toUpperCase() == data.customer_details.invoicingid) {
+        signIn(id);
+      } else {
+        Alert.alert(
+          "Incorrect Login Details",
+          "Please enter correct login info.",
+          [{ text: "OK" }]
+        );
+        setCode("");
+        setId("");
+      }
+    }
+  };
+
+  return (
+    <SafeAreaView style={{ flex: 1 }}>
+      <ThemedView style={{ flex: 1 }}>
+        <KeyboardAvoidingView
+          style={{
+            flex: 1,
+            padding: 15,
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Image
+            source={Logo}
+            style={{
+              width: 150,
+              height: 100,
+              marginLeft: 15,
+            }}
+            resizeMode="contain"
+            resizeMethod="scale"
+          />
+
+          <ThemedText
+            style={{
+              fontWeight: "200",
+              fontSize: 25,
+              marginTop: 45,
+              width: "100%",
+            }}
+          >
+            Let's Login
+          </ThemedText>
+
+          <View
+            style={[
+              styles.Input,
+              {
+                marginVertical: 15,
+                flexDirection: "row",
+                alignItems: "center",
+                overflow: "hidden",
+              },
+            ]}
+          >
+            <Ionicons name="finger-print-outline" size={20} />
+            <TextInput
+              placeholder="Enter Client ID"
+              value={id}
+              onChangeText={(text) => setId(text)}
+              autoCapitalize="none"
+              keyboardType="phone-pad"
+              style={{
+                paddingHorizontal: 15,
+                flex: 1,
+              }}
+            />
+            {/* <Pressable
+              style={{
+                paddingHorizontal: 15,
+                paddingVertical: 5,
+              }}
+            >
+              <ThemedText style={{ fontWeight: "bold", color: "#cc0000" }}>
+                Verify
+              </ThemedText>
+            </Pressable> */}
+          </View>
+
+          <View
+            style={[
+              styles.Input,
+              {
+                marginVertical: 15,
+                flexDirection: "row",
+                alignItems: "center",
+                overflow: "hidden",
+              },
+            ]}
+          >
+            <Ionicons name="key-outline" size={20} />
+            <TextInput
+              placeholder="Enter Client Code"
+              value={code}
+              onChangeText={(text) => setCode(text)}
+              style={{
+                paddingHorizontal: 15,
+                flex: 1,
+              }}
+            />
+          </View>
+
+          <Pressable
+            style={{
+              width: "100%",
+              backgroundColor: "#cc0000",
+              padding: 16,
+              marginVertical: 15,
+              alignItems: "center",
+              justifyContent: "center",
+              borderRadius: 10,
+            }}
+            onPress={() => handleSignIn(id)}
+          >
+            <Text style={{ color: "#fff" }}>Sign In</Text>
+          </Pressable>
+
+          <Button
+            linkUrl="https://wa.me//27769790642"
+            btnText="Don't Have Required Information"
+            btnBorder={true}
+          />
+        </KeyboardAvoidingView>
+        <ThemedText
+          lightColor="#ccc"
+          darkColor="#333"
+          style={{
+            marginVertical: 30,
+            width: "100%",
+            textAlignVertical: "center",
+            textAlign: "center",
+          }}
+        >
+          Powered by Dannel Web Design
+        </ThemedText>
+      </ThemedView>
+    </SafeAreaView>
+  );
+};
+
+export default Login;

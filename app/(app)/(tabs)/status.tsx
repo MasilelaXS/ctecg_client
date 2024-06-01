@@ -15,11 +15,13 @@ import Button from "@/components/Button";
 import { Ionicons } from "@expo/vector-icons";
 import styles from "@/components/Styles";
 import { Link, router } from "expo-router";
+import { useAuth } from "@/context/Auth";
 
 const Status = () => {
   let colorScheme = useColorScheme();
   let iconColor = colorScheme === "dark" ? "white" : "black";
   const { width } = Dimensions.get("window");
+  const { userID } = useAuth();
 
   const Ad = "https://ctecg.co.za/ctecg_api/Ads/ad3.png";
 
@@ -34,7 +36,7 @@ const Status = () => {
   const fetchData = async () => {
     try {
       const response = await fetch(
-        "http://ctecg.co.za/ctecg_api/getUsageData.php?customerid=2021"
+        "http://ctecg.co.za/ctecg_api/getUsageData.php?customerid=" + userID
       );
       const jsonData = await response.json();
       setData(jsonData);
@@ -69,7 +71,12 @@ const Status = () => {
         </ThemedView>
       ) : (
         <ScrollView style={{ width: "100%", paddingVertical: 20 }}>
-          <ThemedView style={[styles.innerContainer, { padding: 15 }]}>
+          <ThemedView
+            style={[
+              styles.innerContainer,
+              { paddingHorizontal: 15, paddingVertical: 30 },
+            ]}
+          >
             {/* Card Full */}
             <ThemedView
               style={styles.cardFullContainer}

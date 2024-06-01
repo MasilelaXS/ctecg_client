@@ -9,8 +9,8 @@ import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import "react-native-reanimated";
-
 import { useColorScheme } from "@/components/useColorScheme";
+import { AuthProvider } from "@/context/Auth";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -27,7 +27,7 @@ SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
-    SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
+    SpaceMono: require("@/assets/fonts/SpaceMono-Regular.ttf"),
     ...FontAwesome.font,
   });
 
@@ -46,7 +46,11 @@ export default function RootLayout() {
     return null;
   }
 
-  return <RootLayoutNav />;
+  return (
+    <AuthProvider>
+      <RootLayoutNav />
+    </AuthProvider>
+  );
 }
 
 function RootLayoutNav() {
@@ -54,36 +58,9 @@ function RootLayoutNav() {
 
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen
-          name="error"
-          options={{ title: "Error", headerShown: false }}
-        />
-        <Stack.Screen
-          name="invoice/[id]"
-          options={{ title: "Invoice Details" }}
-        />
-        <Stack.Screen
-          name="infoEdit"
-          options={{ presentation: "modal", title: "Edit Information" }}
-        />
-        <Stack.Screen
-          name="modal"
-          options={{ presentation: "modal", title: "Refer a Friend" }}
-        />
-        <Stack.Screen
-          name="fiber"
-          options={{ presentation: "modal", title: "Fiber Connection" }}
-        />
-        <Stack.Screen
-          name="ticket"
-          options={{ presentation: "modal", title: "Open Ticket" }}
-        />
-        <Stack.Screen
-          name="offline"
-          options={{ presentation: "modal", title: "Troubleshoot" }}
-        />
+      <Stack screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="(app)" options={{ headerShown: false }} />
+        <Stack.Screen name="(auth)/login" options={{ headerShown: false }} />
       </Stack>
     </ThemeProvider>
   );

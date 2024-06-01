@@ -15,17 +15,19 @@ import { Ionicons } from "@expo/vector-icons";
 import styles from "@/components/Styles";
 import Icon from "@/assets/images/user.png";
 import { router } from "expo-router";
+import { useAuth } from "@/context/Auth";
 
 const Account = () => {
   let colorScheme = useColorScheme();
   let iconColor = colorScheme === "dark" ? "white" : "black";
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const { userID, signOut } = useAuth();
 
   const fetchData = async () => {
     try {
       const response = await fetch(
-        "http://ctecg.co.za/ctecg_api/getCustomerData.php?customerid=2021" //2021
+        "http://ctecg.co.za/ctecg_api/getCustomerData.php?customerid=" + userID //2021
       );
       const jsonData = await response.json();
       setData(jsonData);
@@ -56,7 +58,12 @@ const Account = () => {
         </ThemedView>
       ) : (
         <ScrollView style={{ width: "100%", paddingVertical: 20 }}>
-          <ThemedView style={[styles.innerContainer, { padding: 15 }]}>
+          <ThemedView
+            style={[
+              styles.innerContainer,
+              { paddingHorizontal: 15, paddingVertical: 20 },
+            ]}
+          >
             {/* Data Balance */}
 
             <Pressable style={{ marginTop: 15 }}>
@@ -198,8 +205,8 @@ const Account = () => {
               btnBorder={false}
             />
 
-            <Pressable style={{ width: "100%", marginBottom: 40 }}>
-              <ThemedText>Signout</ThemedText>
+            <Pressable onPress={() => signOut()} style={styles.btnBorder}>
+              <ThemedText>Logout</ThemedText>
             </Pressable>
           </ThemedView>
         </ScrollView>

@@ -14,11 +14,13 @@ import { StatusBar } from "expo-status-bar";
 import { Ionicons } from "@expo/vector-icons";
 import styles from "@/components/Styles";
 import { Link, router } from "expo-router";
+import { useAuth } from "@/context/Auth";
 
 export default function TabOneScreen() {
   let colorScheme = useColorScheme();
   let iconColor = colorScheme === "dark" ? "white" : "black";
   const { width } = Dimensions.get("window");
+  const { userID } = useAuth();
 
   const Ad = "https://ctecg.co.za/ctecg_api/Ads/ad.png";
 
@@ -33,7 +35,7 @@ export default function TabOneScreen() {
   const fetchData = async () => {
     try {
       const response = await fetch(
-        "http://ctecg.co.za/ctecg_api/getDashboardData.php?customerid=2021"
+        "http://ctecg.co.za/ctecg_api/getDashboardData.php?customerid=" + userID
       );
       const jsonData = await response.json();
       setData(jsonData);

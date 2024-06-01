@@ -16,6 +16,7 @@ import Ad from "@/assets/images/card.png";
 import { router } from "expo-router";
 import Button from "@/components/Button";
 import InvoiceItem from "@/components/invoiceItem";
+import { useAuth } from "@/context/Auth";
 
 export default function Bill() {
   let colorScheme = useColorScheme();
@@ -24,11 +25,12 @@ export default function Bill() {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const { width } = Dimensions.get("window");
+  const { userID } = useAuth();
 
   const fetchData = async () => {
     try {
       const response = await fetch(
-        "http://ctecg.co.za/ctecg_api/getInvoiceData.php?customerid=2021"
+        "http://ctecg.co.za/ctecg_api/getInvoiceData.php?customerid=" + userID
       );
       const jsonData = await response.json();
       setData(jsonData);

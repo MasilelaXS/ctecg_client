@@ -81,6 +81,28 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 15,
   },
+  btn: {
+    width: "100%",
+    backgroundColor: "#cc0000",
+    padding: 16,
+    marginVertical: 15,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 10,
+  },
+
+  btnBorder: {
+    width: "100%",
+    backgroundColor: "rgba(204,0,0,.2)",
+    padding: 16,
+    marginVertical: 10,
+    alignItems: "center",
+    justifyContent: "center",
+    borderColor: "#cc0000",
+    borderWidth: 1,
+    borderStyle: "solid",
+    borderRadius: 10,
+  },
 });
 
 export default styles;
