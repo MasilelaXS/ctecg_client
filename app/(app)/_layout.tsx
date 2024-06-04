@@ -26,6 +26,10 @@ const AppLayout = () => {
           options={{ presentation: "modal", title: "Refer a Friend" }}
         />
         <Stack.Screen
+          name="invoiceList"
+          options={{ presentation: "modal", title: "Invoices" }}
+        />
+        <Stack.Screen
           name="fiber"
           options={{ presentation: "modal", title: "Fiber Connection" }}
         />

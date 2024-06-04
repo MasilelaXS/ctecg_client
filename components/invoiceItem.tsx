@@ -21,20 +21,28 @@ const InvoiceItem: FC<ItemProps> = ({
   let colorScheme = useColorScheme();
   let iconColor = colorScheme === "dark" ? "white" : "black";
   return (
-    <View style={styles.flexRow}>
+    <View style={[styles.flexRow, { paddingVertical: 15 }]}>
       <View>
         <ThemedText style={{ fontWeight: "bold" }}>{invDate}</ThemedText>
         <ThemedText style={{ fontSize: 25, fontWeight: "200" }}>
           {amount}
         </ThemedText>
-        <ThemedText style={{ fontStyle: "italic" }}>{paymentstatus}</ThemedText>
       </View>
-      <View>
-        <Button
+      <View style={{ alignItems: "flex-end" }}>
+        {/* <Button
           linkUrl={"/invoice/" + invid}
           btnText="Download"
           btnBorder={false}
-        />
+        /> */}
+        {paymentstatus.toLocaleUpperCase() == "PAID" ||
+        paymentstatus.toLocaleUpperCase() == "CREDITED" ? (
+          <Ionicons name="checkmark-done-outline" size={20} />
+        ) : (
+          <Ionicons name="checkmark-outline" size={20} />
+        )}
+        <ThemedText style={{ fontStyle: "italic" }}>
+          {paymentstatus[0].toLocaleUpperCase() + paymentstatus.substring(1)}
+        </ThemedText>
       </View>
       {/* <ThemedView
           style={styles.separator}
