@@ -15,8 +15,99 @@ import styles from "@/components/Styles";
 import Button from "@/components/Button";
 import { Ionicons } from "@expo/vector-icons";
 import { Link } from "expo-router";
+import { useState } from "react";
+import { useAuth } from "@/context/Auth";
+
+type SendEmailParams = {
+  customer_id: string;
+  name1: string;
+  contact1: string;
+  email1: string;
+  address1: string;
+  town1: string;
+  code1: string;
+};
+
+// Ensure useAuth() is properly typed
+type AuthContextType = {
+  userID: string | null;
+};
 
 export default function ModalScreen() {
+  const [name, setName] = useState<string>("");
+  const [contact, setContact] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [address, setAddress] = useState<string>("");
+  const [town, setTown] = useState<string>("");
+  const [code, setCode] = useState<string>("");
+  const [btnLoading, setBtnLoading] = useState<boolean>(false);
+  const { userID } = useAuth() as AuthContextType;
+
+  // Function to send email
+  const sendEmail = async ({
+    customer_id,
+    name1,
+    contact1,
+    email1,
+    address1,
+    town1,
+    code1,
+  }: SendEmailParams): Promise<void> => {
+    try {
+      const url = `http://ctecg.co.za/ctecg_api/fibreMail.php?customerid=${encodeURIComponent(
+        customer_id
+      )}&name=${encodeURIComponent(name1)}&contact=${encodeURIComponent(
+        contact1
+      )}&email=${encodeURIComponent(email1)}&address=${encodeURIComponent(
+        address1
+      )}&town=${encodeURIComponent(town1)}&code=${encodeURIComponent(code1)}`;
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      const responseData = await response.json();
+      if (responseData.error) {
+        console.log("Error:", responseData.error);
+        Alert.alert("Error", responseData.error);
+        setBtnLoading(false);
+      } else {
+        console.log("Response:", responseData);
+        Alert.alert("Success", "Email sent successfully!");
+        setBtnLoading(false);
+        setName("");
+        setContact("");
+        setEmail("");
+        setAddress("");
+        setTown("");
+        setCode("");
+      }
+    } catch (error) {
+      console.error("Error sending email:", error);
+      Alert.alert("Error", "Failed to send email. Please try again.");
+      setBtnLoading(false);
+    }
+  };
+
+  // Ensure other variables are of type string or provide default values
+  const handleEmail = () => {
+    setBtnLoading(true);
+    if (userID === null) {
+      Alert.alert("Error", "User ID is null");
+      setBtnLoading(false);
+      return;
+    } else {
+      sendEmail({
+        customer_id: userID,
+        name1: name,
+        contact1: contact,
+        email1: email,
+        address1: address,
+        town1: town,
+        code1: code,
+      });
+    }
+  };
+
   const informationModal = () =>
     Alert.alert(
       "Information",
@@ -43,6 +134,8 @@ export default function ModalScreen() {
             <TextInput
               placeholder="Enter your full name"
               style={styles.Input}
+              value={name}
+              onChangeText={(text) => setName(text)}
             />
           </View>
 
@@ -54,6 +147,8 @@ export default function ModalScreen() {
               placeholder="Enter contact Number"
               keyboardType="phone-pad"
               style={styles.Input}
+              value={contact}
+              onChangeText={(text) => setContact(text)}
             />
           </View>
 
@@ -65,6 +160,8 @@ export default function ModalScreen() {
               placeholder="Enter your email"
               keyboardType="email-address"
               style={styles.Input}
+              value={email}
+              onChangeText={(text) => setEmail(text)}
             />
           </View>
 
@@ -77,6 +174,8 @@ export default function ModalScreen() {
               multiline={true}
               numberOfLines={2}
               style={[{ textAlignVertical: "top" }, styles.Input]}
+              value={address}
+              onChangeText={(text) => setAddress(text)}
             />
           </View>
 
@@ -90,6 +189,8 @@ export default function ModalScreen() {
             <TextInput
               placeholder="Enter your city or town"
               style={styles.Input}
+              value={town}
+              onChangeText={(text) => setTown(text)}
             />
           </View>
 
@@ -101,6 +202,8 @@ export default function ModalScreen() {
               placeholder="Enter your postal code"
               keyboardType="phone-pad"
               style={styles.Input}
+              value={code}
+              onChangeText={(text) => setCode(text)}
             />
           </View>
 
@@ -108,7 +211,15 @@ export default function ModalScreen() {
             <ThemedText style={{ marginTop: 15 }}></ThemedText>
           </Pressable>
 
-          <Button linkUrl="" btnText="Submit" btnBorder={false} />
+          {btnLoading ? (
+            <Pressable style={styles.btn}>
+              <ThemedText style={{ color: "#fff" }}>Please Wait...</ThemedText>
+            </Pressable>
+          ) : (
+            <Pressable onPress={() => handleEmail()} style={styles.btn}>
+              <ThemedText style={{ color: "#fff" }}>Submit</ThemedText>
+            </Pressable>
+          )}
         </KeyboardAvoidingView>
       </ScrollView>
 
