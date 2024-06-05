@@ -44,7 +44,7 @@ export default function ModalScreen() {
     msg,
   }: SendEmailParams): Promise<void> => {
     try {
-      const url = `http://ctecg.co.za/ctecg_api/ticketMail.php?customerid=${encodeURIComponent(
+      const url = `https://ctecg.co.za/ctecg_api/ticketMail.php?customerid=${encodeURIComponent(
         customer_id
       )}&description=${encodeURIComponent(
         description

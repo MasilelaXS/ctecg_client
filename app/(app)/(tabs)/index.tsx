@@ -35,7 +35,7 @@ export default function TabOneScreen() {
   const fetchData = async () => {
     try {
       const response = await fetch(
-        "http://ctecg.co.za/ctecg_api/getDashboardData.php?customerid=" + userID
+        "https://ctecg.co.za/ctecg_api/getDashboardData.php?customerid=" + userID
       );
       const jsonData = await response.json();
       setData(jsonData);

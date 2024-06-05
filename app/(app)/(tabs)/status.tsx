@@ -36,7 +36,7 @@ const Status = () => {
   const fetchData = async () => {
     try {
       const response = await fetch(
-        "http://ctecg.co.za/ctecg_api/getUsageData.php?customerid=" + userID
+        "https://ctecg.co.za/ctecg_api/getUsageData.php?customerid=" + userID
       );
       const jsonData = await response.json();
       setData(jsonData);

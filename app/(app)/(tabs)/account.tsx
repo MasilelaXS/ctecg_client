@@ -14,7 +14,6 @@ import Button from "@/components/Button";
 import { Ionicons } from "@expo/vector-icons";
 import styles from "@/components/Styles";
 import Icon from "@/assets/images/user.png";
-import { router } from "expo-router";
 import { useAuth } from "@/context/Auth";
 
 const Account = () => {
@@ -27,7 +26,7 @@ const Account = () => {
   const fetchData = async () => {
     try {
       const response = await fetch(
-        "http://ctecg.co.za/ctecg_api/getCustomerData.php?customerid=" + userID //2021
+        "https://ctecg.co.za/ctecg_api/getCustomerData.php?customerid=" + userID //2021
       );
       const jsonData = await response.json();
       setData(jsonData);

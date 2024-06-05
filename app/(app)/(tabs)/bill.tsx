@@ -18,9 +18,7 @@ import { Ionicons } from "@expo/vector-icons";
 import styles from "@/components/Styles";
 import Ad from "@/assets/images/card.png";
 import { Link, router } from "expo-router";
-import Button from "@/components/Button";
 import { useAuth } from "@/context/Auth";
-import { MaskedTextInput } from "react-native-mask-text";
 
 type SendEmailParams = {
   customer_id: string;
@@ -54,7 +52,7 @@ export default function Bill() {
   const fetchData = async () => {
     try {
       const response = await fetch(
-        "http://ctecg.co.za/ctecg_api/getInvoiceData.php?customerid=" + userID
+        "https://ctecg.co.za/ctecg_api/getInvoiceData.php?customerid=" + userID
       );
       const jsonData = await response.json();
       setData(jsonData);
@@ -79,7 +77,7 @@ export default function Bill() {
     invoicedate,
   }: SendEmailParams): Promise<void> => {
     try {
-      const url = `http://ctecg.co.za/ctecg_api/invoiceMail.php?customerid=${encodeURIComponent(
+      const url = `https://ctecg.co.za/ctecg_api/invoiceMail.php?customerid=${encodeURIComponent(
         customer_id
       )}&invoicedate=${encodeURIComponent(invoicedate)}`;
       const response = await fetch(url);
@@ -110,7 +108,7 @@ export default function Bill() {
     statementdate,
   }: SendEmailParams2): Promise<void> => {
     try {
-      const url = `http://ctecg.co.za/ctecg_api/statementMail.php?customerid=${encodeURIComponent(
+      const url = `https://ctecg.co.za/ctecg_api/statementMail.php?customerid=${encodeURIComponent(
         customer_id
       )}&statementdate=${encodeURIComponent(statementdate)}`;
       const response = await fetch(url);

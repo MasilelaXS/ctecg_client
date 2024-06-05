@@ -69,25 +69,18 @@ export function AuthProvider({ children }: PropsWithChildren<{}>) {
     if (!isConnected) {
       // Redirect to error page if no internet
       router.replace("/error"); // Assuming you have an /error route
-      console.log("No internet connection, redirecting to /error");
       return;
     }
 
     if (!userID && rootSegment !== "(auth)") {
       router.replace("/(auth)/login");
-      console.log(
-        "Redirecting to (auth)/login, current rootSegment:",
-        rootSegment
-      );
     } else if (userID && rootSegment !== "(app)") {
       router.replace("/(app)");
-      console.log("Redirecting to (app), current rootSegment:", rootSegment);
     }
   }, [userID, rootSegment, isConnected]);
 
   // Corrected signIn method
   const signIn = (id: string) => {
-    console.log("Signing in with ID:", id);
     setUserID(id);
     router.replace("/(app)");
   };

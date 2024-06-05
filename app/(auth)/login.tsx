@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   Image,
   View,
   Text,
-  Dimensions,
   TextInput,
   KeyboardAvoidingView,
   Pressable,
@@ -29,7 +28,7 @@ const Login = () => {
   const fetchData = async (id: string) => {
     try {
       const response = await fetch(
-        "http://ctecg.co.za/ctecg_api/getCustomerData.php?customerid=" + id //2021
+        "https://ctecg.co.za/ctecg_api/getCustomerData.php?customerid=" + id //2021
       );
       const jsonData = await response.json();
       setData(jsonData);

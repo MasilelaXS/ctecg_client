@@ -40,7 +40,7 @@ const InfoEdit = () => {
     msg,
   }: SendEmailParams): Promise<void> => {
     try {
-      const url = `http://ctecg.co.za/ctecg_api/infoMail.php?customerid=${encodeURIComponent(
+      const url = `https://ctecg.co.za/ctecg_api/infoMail.php?customerid=${encodeURIComponent(
         customer_id
       )}&cell=${encodeURIComponent(cell)}&email=${encodeURIComponent(
         email

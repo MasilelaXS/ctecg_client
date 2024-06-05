@@ -54,7 +54,7 @@ export default function ModalScreen() {
     code1,
   }: SendEmailParams): Promise<void> => {
     try {
-      const url = `http://ctecg.co.za/ctecg_api/fibreMail.php?customerid=${encodeURIComponent(
+      const url = `https://ctecg.co.za/ctecg_api/fibreMail.php?customerid=${encodeURIComponent(
         customer_id
       )}&name=${encodeURIComponent(name1)}&contact=${encodeURIComponent(
         contact1
