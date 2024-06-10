@@ -9,6 +9,7 @@ import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import "react-native-reanimated";
+import { RootSiblingParent } from 'react-native-root-siblings';
 import { useColorScheme } from "@/components/useColorScheme";
 import { AuthProvider } from "@/context/Auth";
 
@@ -47,9 +48,11 @@ export default function RootLayout() {
   }
 
   return (
+    <RootSiblingParent>
     <AuthProvider>
       <RootLayoutNav />
     </AuthProvider>
+    </RootSiblingParent>
   );
 }
 

@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import { Text as ThemedText, View as ThemedView } from "@/components/Themed";
 import styles from "@/components/Styles";
-import Button from "@/components/Button";
+import Toast from "react-native-root-toast";
 import { useState } from "react";
 import { useAuth } from "@/context/Auth";
 
@@ -46,6 +46,15 @@ export default function ModalScreen() {
 
   const { userID } = useAuth() as AuthContextType;
 
+  let toast = (toastMessage: string) => Toast.show(toastMessage, {
+    duration: Toast.durations.SHORT,
+    animation: true,
+    hideOnPress: true,
+    backgroundColor: "#cc0000",
+    textColor: "#fff",
+    opacity: 0.8
+  });
+
   // Function to send email
   const sendEmail = async ({
     customer_id,
@@ -77,8 +86,7 @@ export default function ModalScreen() {
         Alert.alert("Error", responseData.error);
         setBtnLoading(false);
       } else {
-        console.log("Response:", responseData);
-        Alert.alert("Success", "Email sent successfully!");
+        toast("One of our agent will contact you within 24 hours.");
         setBtnLoading(false);
         setName("");
         setContact("");
@@ -89,8 +97,7 @@ export default function ModalScreen() {
         setInfo("");
       }
     } catch (error) {
-      console.error("Error sending email:", error);
-      Alert.alert("Error", "Failed to send email. Please try again.");
+      toast("Unable to Connect.");
       setBtnLoading(false);
     }
   };
@@ -99,7 +106,7 @@ export default function ModalScreen() {
   const handleEmail = () => {
     setBtnLoading(true);
     if (userID === null) {
-      Alert.alert("Error", "User ID is null");
+      toast("Unable to Connect.");
       setBtnLoading(false);
       return;
     } else {

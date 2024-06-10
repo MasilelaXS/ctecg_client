@@ -27,8 +27,7 @@
         "backgroundColor": "#ffffff"
       },
       "permissions": [],
-      "package": "com.dannel.ctecg",
-      "usesCleartextTraffic": true
+      "package": "com.dannel.ctecg"
     },
     "web": {
       "bundler": "metro",

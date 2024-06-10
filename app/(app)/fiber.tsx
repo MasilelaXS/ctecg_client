@@ -4,17 +4,14 @@ import {
   Platform,
   ScrollView,
   TextInput,
-  Image,
-  Alert,
   Pressable,
   View,
   Linking,
 } from "react-native";
 import { Text as ThemedText, View as ThemedView } from "@/components/Themed";
 import styles from "@/components/Styles";
-import Button from "@/components/Button";
 import { Ionicons } from "@expo/vector-icons";
-import { Link } from "expo-router";
+import Toast from "react-native-root-toast";
 import { useState } from "react";
 import { useAuth } from "@/context/Auth";
 
@@ -43,6 +40,15 @@ export default function ModalScreen() {
   const [btnLoading, setBtnLoading] = useState<boolean>(false);
   const { userID } = useAuth() as AuthContextType;
 
+  let toast = (toastMessage: string) => Toast.show(toastMessage, {
+    duration: Toast.durations.LONG,
+    animation: true,
+    hideOnPress: true,
+    backgroundColor: "#cc0000",
+    textColor: "#fff",
+    opacity: 0.8
+  });
+
   // Function to send email
   const sendEmail = async ({
     customer_id,
@@ -67,12 +73,11 @@ export default function ModalScreen() {
       }
       const responseData = await response.json();
       if (responseData.error) {
-        console.log("Error:", responseData.error);
-        Alert.alert("Error", responseData.error);
+        toast("Unable to Connect.");
         setBtnLoading(false);
       } else {
         console.log("Response:", responseData);
-        Alert.alert("Success", "Email sent successfully!");
+        toast("One of our agent will contact you within 24 hours.");
         setBtnLoading(false);
         setName("");
         setContact("");
@@ -82,8 +87,7 @@ export default function ModalScreen() {
         setCode("");
       }
     } catch (error) {
-      console.error("Error sending email:", error);
-      Alert.alert("Error", "Failed to send email. Please try again.");
+      toast("Unable to Connect.");
       setBtnLoading(false);
     }
   };
@@ -92,7 +96,7 @@ export default function ModalScreen() {
   const handleEmail = () => {
     setBtnLoading(true);
     if (userID === null) {
-      Alert.alert("Error", "User ID is null");
+      toast("Unable to Connect.");
       setBtnLoading(false);
       return;
     } else {
@@ -109,20 +113,8 @@ export default function ModalScreen() {
   };
 
   const informationModal = () =>
-    Alert.alert(
-      "Information",
-      `Our fiber connection is currently available exclusively in Groblersdal. However, we are excited to announce that we will be expanding to new areas very soon. Stay tuned for more updates as we bring high-speed connectivity to more communities in the near future!`,
-      [
-        {
-          text: "See Packages",
-          onPress: () =>
-            Linking.openURL(
-              "https://www.mzanzisolutions.co.za/bandwidth-packages.html"
-            ),
-        },
-      ],
-      { cancelable: true }
-    );
+    toast(`Our fiber connection is currently available exclusively in Groblersdal. However, we are excited to announce that we will be expanding to new areas very soon. Stay tuned for more updates as we bring high-speed connectivity to more communities in the near future!`);
+     
   return (
     <ThemedView style={styles.container}>
       <ScrollView>

@@ -52,11 +52,11 @@ export function AuthProvider({ children }: PropsWithChildren<{}>) {
 
   // Handle user ID and network state changes
   useEffect(() => {
-    console.log("useEffect triggered");
-    console.log("userID:", userID);
-    console.log("rootSegment:", rootSegment);
-    console.log("prevRootSegment:", prevRootSegmentRef.current);
-    console.log("isConnected:", isConnected);
+    // console.log("useEffect triggered");
+    // console.log("userID:", userID);
+    // console.log("rootSegment:", rootSegment);
+    // console.log("prevRootSegment:", prevRootSegmentRef.current);
+    // console.log("isConnected:", isConnected);
 
     // If rootSegment or userID are still undefined, do nothing
     if (rootSegment === undefined) return;

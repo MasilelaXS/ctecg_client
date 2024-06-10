@@ -18,6 +18,7 @@ import { Ionicons } from "@expo/vector-icons";
 import styles from "@/components/Styles";
 import Ad from "@/assets/images/card.png";
 import { Link, router } from "expo-router";
+import Toast from "react-native-root-toast";
 import { useAuth } from "@/context/Auth";
 
 type SendEmailParams = {
@@ -49,6 +50,15 @@ export default function Bill() {
   const { width } = Dimensions.get("window");
   const { userID } = useAuth() as AuthContextType;
 
+  let toast = (toastMessage: string) => Toast.show(toastMessage, {
+    duration: Toast.durations.SHORT,
+    animation: true,
+    hideOnPress: true,
+    backgroundColor: "#cc0000",
+    textColor: "#fff",
+    opacity: 0.8
+  });
+
   const fetchData = async () => {
     try {
       const response = await fetch(
@@ -61,7 +71,7 @@ export default function Bill() {
         router.replace("/error");
       }
     } catch (error) {
-      console.error("Error fetching data:", error);
+      toast("Please Make Sure You Have Internet Access and Try Again.");
     } finally {
       setLoading(false);
     }
@@ -80,24 +90,29 @@ export default function Bill() {
       const url = `https://ctecg.co.za/ctecg_api/invoiceMail.php?customerid=${encodeURIComponent(
         customer_id
       )}&invoicedate=${encodeURIComponent(invoicedate)}`;
-      const response = await fetch(url);
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      const responseData = await response.json();
-      if (responseData.error) {
-        console.log("Error:", responseData.error);
-        Alert.alert("Error", responseData.error);
+
+      if (invoiceDate == "") {
+        toast("Please Enter Invoice Month.");
         setBtnLoading(false);
-      } else {
-        console.log("Response:", responseData);
-        Alert.alert("Success", "Email sent successfully!");
-        setBtnLoading(false);
-        setInvoiceDate("");
+      } else{
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const responseData = await response.json();
+        if (responseData.error) {
+          toast("Unable to Connect.");
+          setBtnLoading(false);
+        } else {
+          toast("Invoice will be sent to you within 24 hours.");
+          setBtnLoading(false);
+          setInvoiceDate("");
+        }
       }
+
+      
     } catch (error) {
-      console.error("Error sending email:", error);
-      Alert.alert("Error", "Failed to send email. Please try again.");
+      toast("Unable to Connect.");
       setBtnLoading(false);
     }
   };
@@ -111,24 +126,27 @@ export default function Bill() {
       const url = `https://ctecg.co.za/ctecg_api/statementMail.php?customerid=${encodeURIComponent(
         customer_id
       )}&statementdate=${encodeURIComponent(statementdate)}`;
-      const response = await fetch(url);
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      const responseData = await response.json();
-      if (responseData.error) {
-        console.log("Error:", responseData.error);
-        Alert.alert("Error", responseData.error);
+
+      if (statementDate == "") {
+        toast("Please Enter Statement Month.");
         setBtnLoading2(false);
-      } else {
-        console.log("Response:", responseData);
-        Alert.alert("Success", "Email sent successfully!");
-        setBtnLoading2(false);
-        setStatementDate("");
+      } else{
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const responseData = await response.json();
+        if (responseData.error) {
+          toast("Unable to Connect.");
+          setBtnLoading2(false);
+        } else {
+          toast("Invoice will be sent to you within 24 hours.");
+          setBtnLoading2(false);
+          setInvoiceDate("");
+        }
       }
     } catch (error) {
-      console.error("Error sending email:", error);
-      Alert.alert("Error", "Failed to send email. Please try again.");
+      toast("Unable to Connect.");
       setBtnLoading2(false);
     }
   };
@@ -137,7 +155,7 @@ export default function Bill() {
   const handleInvoiceEmail = () => {
     setBtnLoading(true);
     if (userID === null) {
-      Alert.alert("Error", "User ID is null");
+      toast("Something wrong. Please Try Again");
       setBtnLoading(false);
       return;
     } else {
@@ -152,7 +170,7 @@ export default function Bill() {
   const handleStatementEmail = () => {
     setBtnLoading2(true);
     if (userID === null) {
-      Alert.alert("Error", "User ID is null");
+      toast("Something wrong. Please Try Again");
       setBtnLoading2(false);
       return;
     } else {
@@ -448,7 +466,7 @@ export default function Bill() {
                 )}
               </View>
 
-              <Link
+              {/* <Link
                 href={{
                   pathname: "/invoiceList",
                   params: { invoices: JSON.stringify(data.invoices) },
@@ -460,7 +478,7 @@ export default function Bill() {
                     See Invoices
                   </ThemedText>
                 </Pressable>
-              </Link>
+              </Link> */}
             </View>
 
             {/* <Button linkUrl="" btnText="Request Statement" btnBorder={false} /> */}

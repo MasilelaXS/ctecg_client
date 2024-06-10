@@ -14,6 +14,7 @@ import Button from "@/components/Button";
 import { Ionicons } from "@expo/vector-icons";
 import styles from "@/components/Styles";
 import Icon from "@/assets/images/user.png";
+import Toast from "react-native-root-toast";
 import { useAuth } from "@/context/Auth";
 
 const Account = () => {
@@ -23,6 +24,15 @@ const Account = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const { userID, signOut } = useAuth();
 
+  let toast = (toastMessage: string) => Toast.show(toastMessage, {
+    duration: Toast.durations.SHORT,
+    animation: true,
+    hideOnPress: true,
+    backgroundColor: "#cc0000",
+    textColor: "#fff",
+    opacity: 0.8
+  });
+
   const fetchData = async () => {
     try {
       const response = await fetch(
@@ -31,7 +41,7 @@ const Account = () => {
       const jsonData = await response.json();
       setData(jsonData);
     } catch (error) {
-      console.error("Error fetching data:", error);
+      toast("Please Make Sure You Have Internet Access and Try Again.");
     } finally {
       setLoading(false);
     }
@@ -94,7 +104,7 @@ const Account = () => {
               </View>
               <View>
                 <ThemedText style={styles.cardTitle}>Name</ThemedText>
-                <ThemedText style={{ fontSize: 25, fontWeight: "200" }}>
+                <ThemedText style={{ fontSize: 24, fontWeight: "200" }}>
                   {data.customer_details.name}
                 </ThemedText>
               </View>
@@ -117,7 +127,7 @@ const Account = () => {
               </View>
               <View>
                 <ThemedText style={styles.cardTitle}>Client ID</ThemedText>
-                <ThemedText style={{ fontSize: 25, fontWeight: "200" }}>
+                <ThemedText style={{ fontSize: 24, fontWeight: "200" }}>
                   {data.customer_details.invoicingid}
                 </ThemedText>
               </View>
@@ -147,7 +157,7 @@ const Account = () => {
                         <ThemedText style={styles.cardTitle}>
                           Contact
                         </ThemedText>
-                        <ThemedText style={{ fontSize: 25, fontWeight: "200" }}>
+                        <ThemedText style={{ fontSize: 24, fontWeight: "200" }}>
                           {phoneNumber}
                         </ThemedText>
                       </View>
@@ -155,26 +165,6 @@ const Account = () => {
                   )
                 )
               : null}
-            <View
-              style={{
-                width: "100%",
-                flexDirection: "row",
-                alignItems: "center",
-                marginTop: 15,
-              }}
-            >
-              <View style={{ paddingRight: 15 }}>
-                <Ionicons name="calendar-outline" size={30} color={iconColor} />
-              </View>
-              <View>
-                <ThemedText style={styles.cardTitle}>
-                  Installation Date
-                </ThemedText>
-                <ThemedText style={{ fontSize: 25, fontWeight: "200" }}>
-                  {data.customer_details.installdate}
-                </ThemedText>
-              </View>
-            </View>
 
             <View
               style={{
@@ -191,7 +181,7 @@ const Account = () => {
                 <ThemedText style={styles.cardTitle}>
                   {data.customer_details.county}
                 </ThemedText>
-                <ThemedText style={{ fontSize: 25, fontWeight: "200" }}>
+                <ThemedText style={{ fontSize: 24, fontWeight: "200" }}>
                   {data.customer_details.town}
                 </ThemedText>
                 <ThemedText>{data.customer_details.country}</ThemedText>

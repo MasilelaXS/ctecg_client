@@ -11,7 +11,8 @@ import {
 import { Text as ThemedText, View as ThemedView } from "@/components/Themed";
 import styles from "@/components/Styles";
 import { Picker } from "@react-native-picker/picker";
-import { useEffect, useState } from "react";
+import Toast from "react-native-root-toast";
+import { useState } from "react";
 import { useAuth } from "@/context/Auth";
 
 type SendEmailParams = {
@@ -34,6 +35,15 @@ export default function ModalScreen() {
   const [message, setMessage] = useState<string>("");
   const [btnLoading, setBtnLoading] = useState<Boolean>(false);
   const { userID } = useAuth() as AuthContextType;
+
+  let toast = (toastMessage: string) => Toast.show(toastMessage, {
+    duration: Toast.durations.SHORT,
+    animation: true,
+    hideOnPress: true,
+    backgroundColor: "#cc0000",
+    textColor: "#fff",
+    opacity: 0.8
+  });
 
   // Function to send email
   const sendEmail = async ({
@@ -61,8 +71,7 @@ export default function ModalScreen() {
         Alert.alert("Error", responseData.error);
         setBtnLoading(false);
       } else {
-        console.log("Response:", responseData);
-        Alert.alert("Success", "Email sent successfully!");
+        toast("One of our agent will contact you within 24 hours.");
         setBtnLoading(false);
         setPriority("");
         setDescription("");
@@ -70,8 +79,7 @@ export default function ModalScreen() {
         setMessage("");
       }
     } catch (error) {
-      console.error("Error sending email:", error);
-      Alert.alert("Error", "Failed to send email. Please try again.");
+      toast("Unable to Connect.");
       setBtnLoading(false);
     }
   };
@@ -80,7 +88,7 @@ export default function ModalScreen() {
   const handleSendEmail = () => {
     setBtnLoading(true);
     if (userID === null) {
-      Alert.alert("Error", "User ID is null");
+      toast("Unable to Connect.");
       setBtnLoading(false);
       return;
     } else {

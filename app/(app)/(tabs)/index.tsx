@@ -14,6 +14,7 @@ import { StatusBar } from "expo-status-bar";
 import { Ionicons } from "@expo/vector-icons";
 import styles from "@/components/Styles";
 import { Link, router } from "expo-router";
+import Toast from "react-native-root-toast";
 import { useAuth } from "@/context/Auth";
 
 export default function TabOneScreen() {
@@ -27,6 +28,15 @@ export default function TabOneScreen() {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [adLoaded, setAd] = useState(true);
+
+  let toast = (toastMessage: string) => Toast.show(toastMessage, {
+    duration: Toast.durations.SHORT,
+    animation: true,
+    hideOnPress: true,
+    backgroundColor: "#cc0000",
+    textColor: "#fff",
+    opacity: 0.8
+  });
 
   const handleAdNotLoaded = () => {
     setAd(false);
@@ -44,7 +54,7 @@ export default function TabOneScreen() {
         router.replace("/error");
       }
     } catch (error) {
-      console.error("Error fetching data:", error);
+      toast("Unable to Connect.");
     } finally {
       setLoading(false);
     }

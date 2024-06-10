@@ -15,14 +15,24 @@ import Button from "@/components/Button";
 import Logo from "../../assets/images/client.png";
 import { Ionicons } from "@expo/vector-icons";
 import { useAuth } from "@/context/Auth";
+import Toast from "react-native-root-toast";
 
 const Login = () => {
   const [data, setData] = useState<any>(null);
   const [code, setCode] = useState<string>("");
   const [id, setId] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(true);
+  const [btnLoading, setBtnLoading] = useState<boolean>(false);
 
   const { signIn } = useAuth();
+
+  let toast = (toastMessage: string) => Toast.show(toastMessage, {
+    duration: Toast.durations.SHORT,
+    animation: true,
+    hideOnPress: true,
+    backgroundColor: "#cc0000",
+    textColor: "#fff",
+    opacity: 0.8
+  });
 
   // Mock fetchData function for demonstration
   const fetchData = async (id: string) => {
@@ -30,27 +40,30 @@ const Login = () => {
       const response = await fetch(
         "https://ctecg.co.za/ctecg_api/getCustomerData.php?customerid=" + id //2021
       );
+      setBtnLoading(false);
       const jsonData = await response.json();
       setData(jsonData);
     } catch (error) {
-      console.error("Error fetching data:", error);
+      toast("Please Make Sure You Have Internet Access and Try Again.");
+      setBtnLoading(false);
     }
   };
 
   const handleSignIn = (id: string) => {
-    fetchData(id);
-
-    if (data !== null && data.customer_details.error == "") {
-      if (code.toUpperCase() == data.customer_details.invoicingid) {
-        signIn(id);
-      } else {
-        Alert.alert(
-          "Incorrect Login Details",
-          "Please enter correct login info.",
-          [{ text: "OK" }]
-        );
-        setCode("");
-        setId("");
+    setBtnLoading(true);
+    if (!id) {
+      toast("Please Enter Login Info.");
+      setBtnLoading(false);
+    } else {
+      fetchData(id);
+      if (data !== null && data.customer_details.error == "") {
+        if (code.toUpperCase() == data.customer_details.invoicingid) {
+          signIn(id);
+        } else {
+          toast("Incorrect Login Info.")
+          setCode("");
+          setId("");
+        }
       }
     }
   };
@@ -146,20 +159,37 @@ const Login = () => {
             />
           </View>
 
-          <Pressable
-            style={{
-              width: "100%",
-              backgroundColor: "#cc0000",
-              padding: 16,
-              marginVertical: 15,
-              alignItems: "center",
-              justifyContent: "center",
-              borderRadius: 10,
-            }}
-            onPress={() => handleSignIn(id)}
-          >
-            <Text style={{ color: "#fff" }}>Sign In</Text>
-          </Pressable>
+{btnLoading? (
+  <Pressable
+  style={{
+    width: "100%",
+    backgroundColor: "#cc0000",
+    padding: 16,
+    marginVertical: 15,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 10,
+  }}
+>
+  <Text style={{ color: "#fff" }}>Please Wait...</Text>
+</Pressable>
+): (
+  <Pressable
+  style={{
+    width: "100%",
+    backgroundColor: "#cc0000",
+    padding: 16,
+    marginVertical: 15,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 10,
+  }}
+  onPress={() => handleSignIn(id)}
+>
+  <Text style={{ color: "#fff" }}>Sign In</Text>
+</Pressable>
+)}
+        
 
           <Button
             linkUrl="https://wa.me//27769790642"
