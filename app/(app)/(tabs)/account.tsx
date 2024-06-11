@@ -14,8 +14,8 @@ import Button from "@/components/Button";
 import { Ionicons } from "@expo/vector-icons";
 import styles from "@/components/Styles";
 import Icon from "@/assets/images/user.png";
-import Toast from "react-native-root-toast";
 import { useAuth } from "@/context/Auth";
+import toast from "@/components/toast";
 
 const Account = () => {
   let colorScheme = useColorScheme();
@@ -23,15 +23,6 @@ const Account = () => {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const { userID, signOut } = useAuth();
-
-  let toast = (toastMessage: string) => Toast.show(toastMessage, {
-    duration: Toast.durations.SHORT,
-    animation: true,
-    hideOnPress: true,
-    backgroundColor: "#cc0000",
-    textColor: "#fff",
-    opacity: 0.8
-  });
 
   const fetchData = async () => {
     try {
@@ -41,7 +32,7 @@ const Account = () => {
       const jsonData = await response.json();
       setData(jsonData);
     } catch (error) {
-      toast("Please Make Sure You Have Internet Access and Try Again.");
+      toast("Please Make Sure You Have Internet Access and Try Again.", false);
     } finally {
       setLoading(false);
     }

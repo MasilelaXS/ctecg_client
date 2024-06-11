@@ -17,9 +17,9 @@ import { StatusBar } from "expo-status-bar";
 import { Ionicons } from "@expo/vector-icons";
 import styles from "@/components/Styles";
 import Ad from "@/assets/images/card.png";
-import { Link, router } from "expo-router";
-import Toast from "react-native-root-toast";
+import { router } from "expo-router";
 import { useAuth } from "@/context/Auth";
+import useToast from "@/components/toast";
 
 type SendEmailParams = {
   customer_id: string;
@@ -49,15 +49,7 @@ export default function Bill() {
 
   const { width } = Dimensions.get("window");
   const { userID } = useAuth() as AuthContextType;
-
-  let toast = (toastMessage: string) => Toast.show(toastMessage, {
-    duration: Toast.durations.SHORT,
-    animation: true,
-    hideOnPress: true,
-    backgroundColor: "#cc0000",
-    textColor: "#fff",
-    opacity: 0.8
-  });
+  const toast = useToast();
 
   const fetchData = async () => {
     try {
@@ -71,7 +63,7 @@ export default function Bill() {
         router.replace("/error");
       }
     } catch (error) {
-      toast("Please Make Sure You Have Internet Access and Try Again.");
+      toast("Please Make Sure You Have Internet Access and Try Again.", false);
     } finally {
       setLoading(false);
     }
@@ -92,7 +84,7 @@ export default function Bill() {
       )}&invoicedate=${encodeURIComponent(invoicedate)}`;
 
       if (invoiceDate == "") {
-        toast("Please Enter Invoice Month.");
+        toast("Please Enter Invoice Month.", false);
         setBtnLoading(false);
       } else{
         const response = await fetch(url);
@@ -101,10 +93,10 @@ export default function Bill() {
         }
         const responseData = await response.json();
         if (responseData.error) {
-          toast("Unable to Connect.");
+          toast("Unable to Connect.", false);
           setBtnLoading(false);
         } else {
-          toast("Invoice will be sent to you within 24 hours.");
+          toast("Invoice will be sent to you within 24 hours.", false);
           setBtnLoading(false);
           setInvoiceDate("");
         }
@@ -112,7 +104,7 @@ export default function Bill() {
 
       
     } catch (error) {
-      toast("Unable to Connect.");
+      toast("Unable to Connect.", false);
       setBtnLoading(false);
     }
   };
@@ -128,7 +120,7 @@ export default function Bill() {
       )}&statementdate=${encodeURIComponent(statementdate)}`;
 
       if (statementDate == "") {
-        toast("Please Enter Statement Month.");
+        toast("Please Enter Statement Month.", false);
         setBtnLoading2(false);
       } else{
         const response = await fetch(url);
@@ -137,16 +129,16 @@ export default function Bill() {
         }
         const responseData = await response.json();
         if (responseData.error) {
-          toast("Unable to Connect.");
+          toast("Unable to Connect.", false);
           setBtnLoading2(false);
         } else {
-          toast("Invoice will be sent to you within 24 hours.");
+          toast("Invoice will be sent to you within 24 hours.", false);
           setBtnLoading2(false);
           setInvoiceDate("");
         }
       }
     } catch (error) {
-      toast("Unable to Connect.");
+      toast("Unable to Connect.", false);
       setBtnLoading2(false);
     }
   };
@@ -155,7 +147,7 @@ export default function Bill() {
   const handleInvoiceEmail = () => {
     setBtnLoading(true);
     if (userID === null) {
-      toast("Something wrong. Please Try Again");
+      toast("Something wrong. Please Try Again", false);
       setBtnLoading(false);
       return;
     } else {
@@ -170,7 +162,7 @@ export default function Bill() {
   const handleStatementEmail = () => {
     setBtnLoading2(true);
     if (userID === null) {
-      toast("Something wrong. Please Try Again");
+      toast("Something wrong. Please Try Again", false);
       setBtnLoading2(false);
       return;
     } else {

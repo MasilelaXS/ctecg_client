@@ -13,6 +13,7 @@ import styles from "@/components/Styles";
 import { useState } from "react";
 import Toast from "react-native-root-toast";
 import { useAuth } from "@/context/Auth";
+import useToast from "@/components/toast";
 
 type SendEmailParams = {
   customer_id: string;
@@ -32,15 +33,7 @@ const InfoEdit = () => {
   const [mail, setEmail] = useState<string>("");
   const [message, setMessage] = useState<string>("");
   const { userID } = useAuth() as AuthContextType;
-
-  let toast = (toastMessage: string) => Toast.show(toastMessage, {
-    duration: Toast.durations.SHORT,
-    animation: true,
-    hideOnPress: true,
-    backgroundColor: "#cc0000",
-    textColor: "#fff",
-    opacity: 0.8
-  });
+  const toast = useToast();
 
   // Function to send email
   const sendEmail = async ({
@@ -61,17 +54,17 @@ const InfoEdit = () => {
       }
       const responseData = await response.json();
       if (responseData.error) {
-        toast("Unable to Connect.");
+        toast("Unable to Connect.", false);
         setBtnLoading(false);
       } else {
-        toast("One of our agent will contact you within 24 hours.");
+        toast("One of our agent will contact you within 24 hours.", false);
         setBtnLoading(false);
         setCell("");
         setEmail("");
         setMessage("");
       }
     } catch (error) {
-      toast("Unable to Connect.");
+      toast("Unable to Connect.", false);
       setBtnLoading(false);
     }
   };
@@ -80,7 +73,7 @@ const InfoEdit = () => {
   const handleEmail = () => {
     setBtnLoading(true);
     if (userID === null) {
-      toast("Unable to Connect.");
+      toast("Unable to Connect.", false);
       setBtnLoading(false);
       return;
     } else {

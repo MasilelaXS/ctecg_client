@@ -15,24 +15,16 @@ import Button from "@/components/Button";
 import Logo from "../../assets/images/client.png";
 import { Ionicons } from "@expo/vector-icons";
 import { useAuth } from "@/context/Auth";
-import Toast from "react-native-root-toast";
+import useToast from '@/components/toast';
 
 const Login = () => {
   const [data, setData] = useState<any>(null);
   const [code, setCode] = useState<string>("");
   const [id, setId] = useState<string>("");
   const [btnLoading, setBtnLoading] = useState<boolean>(false);
+  const toast = useToast();
 
   const { signIn } = useAuth();
-
-  let toast = (toastMessage: string) => Toast.show(toastMessage, {
-    duration: Toast.durations.SHORT,
-    animation: true,
-    hideOnPress: true,
-    backgroundColor: "#cc0000",
-    textColor: "#fff",
-    opacity: 0.8
-  });
 
   // Mock fetchData function for demonstration
   const handleSignIn = async (id: string) => {
@@ -41,7 +33,7 @@ const Login = () => {
 
       // Login Here because if login from Button then data doesn't come through. Yu need t press login again because the function is async
       if (!id) {
-        toast("Please Enter Login Info.");
+        toast("Please Enter Login Info.", false);
         setBtnLoading(false);
       } else {
         // Fetching Login Details
@@ -56,17 +48,17 @@ const Login = () => {
             signIn(id);
             console.log("Read");
           } else {
-            toast("Incorrect Login Info.");
+            toast("Incorrect Login Info.", false);
             setCode("");
             setId("");
           }
         } else {
-          toast("Unable to Connect.");
+          toast("Unable to Connect.", false);
         }
       }
 
     } catch (error) {
-      toast("Please Make Sure You Have Internet Access and Try Again.");
+      toast("Please Make Sure You Have Internet Access and Try Again.", false);
       setBtnLoading(false);
     }
   };

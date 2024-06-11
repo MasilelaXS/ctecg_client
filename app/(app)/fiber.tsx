@@ -14,6 +14,7 @@ import { Ionicons } from "@expo/vector-icons";
 import Toast from "react-native-root-toast";
 import { useState } from "react";
 import { useAuth } from "@/context/Auth";
+import useToast from "@/components/toast";
 
 type SendEmailParams = {
   customer_id: string;
@@ -39,15 +40,7 @@ export default function ModalScreen() {
   const [code, setCode] = useState<string>("");
   const [btnLoading, setBtnLoading] = useState<boolean>(false);
   const { userID } = useAuth() as AuthContextType;
-
-  let toast = (toastMessage: string) => Toast.show(toastMessage, {
-    duration: Toast.durations.LONG,
-    animation: true,
-    hideOnPress: true,
-    backgroundColor: "#cc0000",
-    textColor: "#fff",
-    opacity: 0.8
-  });
+  const toast = useToast();
 
   // Function to send email
   const sendEmail = async ({
@@ -73,11 +66,11 @@ export default function ModalScreen() {
       }
       const responseData = await response.json();
       if (responseData.error) {
-        toast("Unable to Connect.");
+        toast("Unable to Connect.", false);
         setBtnLoading(false);
       } else {
         console.log("Response:", responseData);
-        toast("One of our agent will contact you within 24 hours.");
+        toast("One of our agent will contact you within 24 hours.", false);
         setBtnLoading(false);
         setName("");
         setContact("");
@@ -87,7 +80,7 @@ export default function ModalScreen() {
         setCode("");
       }
     } catch (error) {
-      toast("Unable to Connect.");
+      toast("Unable to Connect.", false);
       setBtnLoading(false);
     }
   };
@@ -96,7 +89,7 @@ export default function ModalScreen() {
   const handleEmail = () => {
     setBtnLoading(true);
     if (userID === null) {
-      toast("Unable to Connect.");
+      toast("Unable to Connect.", false);
       setBtnLoading(false);
       return;
     } else {
@@ -113,7 +106,7 @@ export default function ModalScreen() {
   };
 
   const informationModal = () =>
-    toast(`Our fiber connection is currently available exclusively in Groblersdal. However, we are excited to announce that we will be expanding to new areas very soon. Stay tuned for more updates as we bring high-speed connectivity to more communities in the near future!`);
+    toast(`Our fiber connection is currently available exclusively in Groblersdal. However, we are excited to announce that we will be expanding to new areas very soon. Stay tuned for more updates as we bring high-speed connectivity to more communities in the near future!`, true);
      
   return (
     <ThemedView style={styles.container}>

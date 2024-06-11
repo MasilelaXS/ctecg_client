@@ -14,14 +14,15 @@ import { StatusBar } from "expo-status-bar";
 import { Ionicons } from "@expo/vector-icons";
 import styles from "@/components/Styles";
 import { Link, router } from "expo-router";
-import Toast from "react-native-root-toast";
 import { useAuth } from "@/context/Auth";
+import useToast from "@/components/toast";
 
 export default function TabOneScreen() {
   let colorScheme = useColorScheme();
   let iconColor = colorScheme === "dark" ? "white" : "black";
   const { width } = Dimensions.get("window");
   const { userID } = useAuth();
+  const toast = useToast();
 
   const Ad = "https://ctecg.co.za/ctecg_api/Ads/ad.png";
 
@@ -29,14 +30,6 @@ export default function TabOneScreen() {
   const [loading, setLoading] = useState<boolean>(true);
   const [adLoaded, setAd] = useState(true);
 
-  let toast = (toastMessage: string) => Toast.show(toastMessage, {
-    duration: Toast.durations.SHORT,
-    animation: true,
-    hideOnPress: true,
-    backgroundColor: "#cc0000",
-    textColor: "#fff",
-    opacity: 0.8
-  });
 
   const handleAdNotLoaded = () => {
     setAd(false);
@@ -54,7 +47,7 @@ export default function TabOneScreen() {
         router.replace("/error");
       }
     } catch (error) {
-      toast("Unable to Connect.");
+      toast("Unable to Connect.", false);
     } finally {
       setLoading(false);
     }

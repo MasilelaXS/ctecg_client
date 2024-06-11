@@ -35,14 +35,15 @@ const Error = () => {
           bottom: 45,
         }}
       >
+        <Pressable onPress={() => signOut()} style={styles.btnBorder}>
+          <ThemedText>Retry</ThemedText>
+        </Pressable>
         <Button
           linkUrl="https://wa.me//27769790642"
           btnText="Chat With Us"
           btnBorder={true}
         />
-        <Pressable onPress={() => signOut()} style={styles.btnBorder}>
-          <ThemedText>Retry</ThemedText>
-        </Pressable>
+        
         <ThemedText style={{ textAlign: "center" }}>
           24/7 Support 076 979 0642
         </ThemedText>

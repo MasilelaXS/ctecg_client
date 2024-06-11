@@ -17,27 +17,21 @@ import Toast from "react-native-root-toast";
 import styles from "@/components/Styles";
 import { Link, router } from "expo-router";
 import { useAuth } from "@/context/Auth";
+import useToast from "@/components/toast";
 
 const Status = () => {
   let colorScheme = useColorScheme();
   let iconColor = colorScheme === "dark" ? "white" : "black";
   const { width } = Dimensions.get("window");
   const { userID } = useAuth();
+  const toast = useToast();
 
   const Ad = "https://ctecg.co.za/ctecg_api/Ads/ad3.png";
 
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [adLoaded, setAd] = useState(true);
-
-  let toast = (toastMessage: string) => Toast.show(toastMessage, {
-    duration: Toast.durations.SHORT,
-    animation: true,
-    hideOnPress: true,
-    backgroundColor: "#cc0000",
-    textColor: "#fff",
-    opacity: 0.8
-  });
+  
 
   const handleAdNotLoaded = () => {
     setAd(false);
@@ -55,7 +49,7 @@ const Status = () => {
         router.replace("/error");
       }
     } catch (error) {
-      toast("Unable to Connect.");
+      toast("Unable to Connect.", false);
     } finally {
       setLoading(false);
     }

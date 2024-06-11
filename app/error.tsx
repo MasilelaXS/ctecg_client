@@ -1,13 +1,16 @@
 import React from "react";
-import { useColorScheme, Platform } from "react-native";
+import { useColorScheme, Platform, Pressable } from "react-native";
 import { Text as ThemedText, View as ThemedView } from "@/components/Themed";
 import Button from "@/components/Button";
 import { Ionicons } from "@expo/vector-icons";
 import { StatusBar } from "expo-status-bar";
+import { useAuth } from "@/context/Auth";
+import styles from "@/components/Styles";
 
 const Error = () => {
   let colorScheme = useColorScheme();
   let iconColor = colorScheme === "dark" ? "white" : "black";
+  const { signOut } = useAuth();
   return (
     <ThemedView
       style={{
@@ -32,11 +35,15 @@ const Error = () => {
           bottom: 45,
         }}
       >
+        <Pressable onPress={() => signOut()} style={styles.btnBorder}>
+          <ThemedText>Retry</ThemedText>
+        </Pressable>
         <Button
           linkUrl="https://wa.me//27769790642"
           btnText="Chat With Us"
           btnBorder={true}
         />
+        
         <ThemedText style={{ textAlign: "center" }}>
           24/7 Support 076 979 0642
         </ThemedText>
