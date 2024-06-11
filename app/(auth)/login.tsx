@@ -15,7 +15,7 @@ import Button from "@/components/Button";
 import Logo from "../../assets/images/client.png";
 import { Ionicons } from "@expo/vector-icons";
 import { useAuth } from "@/context/Auth";
-import useToast from '@/components/toast';
+import useToast from "@/components/toast";
 
 const Login = () => {
   const [data, setData] = useState<any>(null);
@@ -30,7 +30,6 @@ const Login = () => {
   const handleSignIn = async (id: string) => {
     setBtnLoading(true);
     try {
-
       // Login Here because if login from Button then data doesn't come through. Yu need t press login again because the function is async
       if (!id) {
         toast("Please Enter Login Info.", false);
@@ -46,7 +45,6 @@ const Login = () => {
         if (jsonData !== null && jsonData.customer_details.error == "") {
           if (code.toUpperCase() == jsonData.customer_details.invoicingid) {
             signIn(id);
-            console.log("Read");
           } else {
             toast("Incorrect Login Info.", false);
             setCode("");
@@ -56,7 +54,6 @@ const Login = () => {
           toast("Unable to Connect.", false);
         }
       }
-
     } catch (error) {
       toast("Please Make Sure You Have Internet Access and Try Again.", false);
       setBtnLoading(false);
@@ -154,37 +151,36 @@ const Login = () => {
             />
           </View>
 
-{btnLoading? (
-  <Pressable
-  style={{
-    width: "100%",
-    backgroundColor: "#cc0000",
-    padding: 16,
-    marginVertical: 15,
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 10,
-  }}
->
-  <Text style={{ color: "#fff" }}>Please Wait...</Text>
-</Pressable>
-): (
-  <Pressable
-  style={{
-    width: "100%",
-    backgroundColor: "#cc0000",
-    padding: 16,
-    marginVertical: 15,
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 10,
-  }}
-  onPress={() => handleSignIn(id)}
->
-  <Text style={{ color: "#fff" }}>Sign In</Text>
-</Pressable>
-)}
-        
+          {btnLoading ? (
+            <Pressable
+              style={{
+                width: "100%",
+                backgroundColor: "#cc0000",
+                padding: 16,
+                marginVertical: 15,
+                alignItems: "center",
+                justifyContent: "center",
+                borderRadius: 10,
+              }}
+            >
+              <Text style={{ color: "#fff" }}>Please Wait...</Text>
+            </Pressable>
+          ) : (
+            <Pressable
+              style={{
+                width: "100%",
+                backgroundColor: "#cc0000",
+                padding: 16,
+                marginVertical: 15,
+                alignItems: "center",
+                justifyContent: "center",
+                borderRadius: 10,
+              }}
+              onPress={() => handleSignIn(id)}
+            >
+              <Text style={{ color: "#fff" }}>Sign In</Text>
+            </Pressable>
+          )}
 
           <Button
             linkUrl="https://wa.me//27769790642"

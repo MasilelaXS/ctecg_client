@@ -20,6 +20,7 @@ import Ad from "@/assets/images/card.png";
 import { router } from "expo-router";
 import { useAuth } from "@/context/Auth";
 import useToast from "@/components/toast";
+import Menu from "@/components/menu";
 
 type SendEmailParams = {
   customer_id: string;
@@ -49,6 +50,7 @@ export default function Bill() {
 
   const { width } = Dimensions.get("window");
   const { userID } = useAuth() as AuthContextType;
+  const { menuStatus, hideMenu } = useAuth();
   const toast = useToast();
 
   const fetchData = async () => {
@@ -71,6 +73,7 @@ export default function Bill() {
 
   useEffect(() => {
     fetchData();
+    hideMenu();
   }, []);
 
   // Function to send email
@@ -86,7 +89,7 @@ export default function Bill() {
       if (invoiceDate == "") {
         toast("Please Enter Invoice Month.", false);
         setBtnLoading(false);
-      } else{
+      } else {
         const response = await fetch(url);
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
@@ -101,8 +104,6 @@ export default function Bill() {
           setInvoiceDate("");
         }
       }
-
-      
     } catch (error) {
       toast("Unable to Connect.", false);
       setBtnLoading(false);
@@ -122,7 +123,7 @@ export default function Bill() {
       if (statementDate == "") {
         toast("Please Enter Statement Month.", false);
         setBtnLoading2(false);
-      } else{
+      } else {
         const response = await fetch(url);
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
@@ -198,6 +199,7 @@ export default function Bill() {
               justifyContent: "center",
             }}
           >
+            {menuStatus ? <Menu /> : null}
             <View>
               <ImageBackground
                 source={Ad}

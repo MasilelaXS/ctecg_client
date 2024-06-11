@@ -1,4 +1,7 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Dimensions } from "react-native";
+
+const viewWidth = Dimensions.get("screen").width;
+const viewHeight = Dimensions.get("screen").height;
 
 const styles = StyleSheet.create({
   container: {
@@ -102,6 +105,26 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderStyle: "solid",
     borderRadius: 10,
+  },
+  floatingMenu: {
+    width: viewWidth * 0.8,
+    position: "absolute",
+    zIndex: 10,
+    padding: 15,
+    borderRadius: 10,
+    alignItems: "center",
+    alignSelf: "center",
+    top: viewHeight / 4,
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 5, // for Android
+  },
+  menuItem: {
+    width: "100%",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingVertical: 15,
   },
 });
 

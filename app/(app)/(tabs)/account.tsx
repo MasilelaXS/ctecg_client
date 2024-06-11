@@ -15,14 +15,16 @@ import { Ionicons } from "@expo/vector-icons";
 import styles from "@/components/Styles";
 import Icon from "@/assets/images/user.png";
 import { useAuth } from "@/context/Auth";
-import toast from "@/components/toast";
+import useToast from "@/components/toast";
+import Menu from "@/components/menu";
 
 const Account = () => {
   let colorScheme = useColorScheme();
   let iconColor = colorScheme === "dark" ? "white" : "black";
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const { userID, signOut } = useAuth();
+  const { userID, menuStatus, hideMenu, signOut } = useAuth();
+  const toast = useToast();
 
   const fetchData = async () => {
     try {
@@ -40,6 +42,7 @@ const Account = () => {
 
   useEffect(() => {
     fetchData();
+    hideMenu();
   }, []);
   return (
     <ThemedView style={styles.container}>
@@ -64,6 +67,8 @@ const Account = () => {
               { paddingHorizontal: 15, paddingVertical: 20 },
             ]}
           >
+            {menuStatus ? <Menu /> : null}
+
             {/* Data Balance */}
 
             <Pressable style={{ marginTop: 15 }}>

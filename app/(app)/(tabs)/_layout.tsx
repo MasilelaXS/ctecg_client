@@ -5,6 +5,7 @@ import { Pressable, Image } from "react-native";
 import Colors from "@/constants/Colors";
 import { useColorScheme } from "@/components/useColorScheme";
 import Logo from "@/assets/images/client.png";
+import { useAuth } from "@/context/Auth";
 
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 function TabBarIcon(props: {
@@ -16,6 +17,7 @@ function TabBarIcon(props: {
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
+  const { showMenu } = useAuth();
 
   return (
     <Tabs
@@ -36,18 +38,16 @@ export default function TabLayout() {
           />
         ),
         headerRight: () => (
-          <Link href="/modal" asChild>
-            <Pressable>
-              {({ pressed }) => (
-                <Ionicons
-                  name="person-add-outline"
-                  size={25}
-                  color={Colors[colorScheme ?? "light"].text}
-                  style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                />
-              )}
-            </Pressable>
-          </Link>
+          <Pressable onPress={() => showMenu()}>
+            {({ pressed }) => (
+              <Ionicons
+                name="ellipsis-vertical-outline"
+                size={25}
+                color={Colors[colorScheme ?? "light"].text}
+                style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
+              />
+            )}
+          </Pressable>
         ),
       }}
     >

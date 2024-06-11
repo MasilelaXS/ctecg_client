@@ -18,12 +18,13 @@ import styles from "@/components/Styles";
 import { Link, router } from "expo-router";
 import { useAuth } from "@/context/Auth";
 import useToast from "@/components/toast";
+import Menu from "@/components/menu";
 
 const Status = () => {
   let colorScheme = useColorScheme();
   let iconColor = colorScheme === "dark" ? "white" : "black";
   const { width } = Dimensions.get("window");
-  const { userID } = useAuth();
+  const { userID, menuStatus, hideMenu } = useAuth();
   const toast = useToast();
 
   const Ad = "https://ctecg.co.za/ctecg_api/Ads/ad3.png";
@@ -31,7 +32,6 @@ const Status = () => {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [adLoaded, setAd] = useState(true);
-  
 
   const handleAdNotLoaded = () => {
     setAd(false);
@@ -57,6 +57,7 @@ const Status = () => {
 
   useEffect(() => {
     fetchData();
+    hideMenu();
   }, []);
   return (
     <ThemedView style={styles.container}>
@@ -81,6 +82,7 @@ const Status = () => {
               { paddingHorizontal: 15, paddingVertical: 30 },
             ]}
           >
+            {menuStatus ? <Menu /> : null}
             {/* Card Full */}
             <ThemedView
               style={styles.cardFullContainer}

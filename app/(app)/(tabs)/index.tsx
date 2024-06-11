@@ -16,12 +16,13 @@ import styles from "@/components/Styles";
 import { Link, router } from "expo-router";
 import { useAuth } from "@/context/Auth";
 import useToast from "@/components/toast";
+import Menu from "@/components/menu";
 
 export default function TabOneScreen() {
   let colorScheme = useColorScheme();
   let iconColor = colorScheme === "dark" ? "white" : "black";
   const { width } = Dimensions.get("window");
-  const { userID } = useAuth();
+  const { userID, menuStatus, hideMenu } = useAuth();
   const toast = useToast();
 
   const Ad = "https://ctecg.co.za/ctecg_api/Ads/ad.png";
@@ -30,7 +31,6 @@ export default function TabOneScreen() {
   const [loading, setLoading] = useState<boolean>(true);
   const [adLoaded, setAd] = useState(true);
 
-
   const handleAdNotLoaded = () => {
     setAd(false);
   };
@@ -38,7 +38,8 @@ export default function TabOneScreen() {
   const fetchData = async () => {
     try {
       const response = await fetch(
-        "https://ctecg.co.za/ctecg_api/getDashboardData.php?customerid=" + userID
+        "https://ctecg.co.za/ctecg_api/getDashboardData.php?customerid=" +
+          userID
       );
       const jsonData = await response.json();
       setData(jsonData);
@@ -55,6 +56,7 @@ export default function TabOneScreen() {
 
   useEffect(() => {
     fetchData();
+    hideMenu();
   }, []);
 
   return (
@@ -75,7 +77,7 @@ export default function TabOneScreen() {
       ) : (
         <ScrollView style={{ width: "100%", paddingVertical: 20 }}>
           <ThemedView style={[styles.innerContainer, { padding: 15 }]}>
-            {/* Data Balance */}
+            {menuStatus ? <Menu /> : null}
             <ThemedView
               style={styles.gauge3}
               lightColor="rgba(255, 193, 193,.4)"
@@ -157,6 +159,7 @@ export default function TabOneScreen() {
                   style={{ height: 4 }}
                 ></ThemedView>
               </ThemedView>
+
               {/* Account Status */}
               <ThemedView
                 style={styles.cardContainer}

@@ -14,6 +14,9 @@ interface AuthContextType {
   userID: string | null;
   signIn: (id: string) => void;
   signOut: () => void;
+  showMenu: () => void;
+  hideMenu: () => void;
+  menuStatus: boolean;
 }
 
 // Initialize the AuthContext
@@ -31,6 +34,7 @@ export function AuthProvider({ children }: PropsWithChildren<{}>) {
   const [userID, setUserID] = useState<string | null>(null);
   const [isConnected, setIsConnected] = useState<boolean>(true);
   const prevRootSegmentRef = useRef<string | null>(null);
+  const [menu, SetShowMenu] = useState<boolean>(false);
 
   const segments = useSegments();
   const rootSegment = segments[0];
@@ -95,6 +99,9 @@ export function AuthProvider({ children }: PropsWithChildren<{}>) {
           setUserID(null);
           router.replace("/(auth)");
         },
+        hideMenu: () => SetShowMenu(false),
+        showMenu: () => SetShowMenu(true),
+        menuStatus: menu,
       }}
     >
       {children}
