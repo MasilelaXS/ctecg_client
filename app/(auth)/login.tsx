@@ -35,36 +35,39 @@ const Login = () => {
   });
 
   // Mock fetchData function for demonstration
-  const fetchData = async (id: string) => {
+  const handleSignIn = async (id: string) => {
+    setBtnLoading(true);
     try {
-      const response = await fetch(
-        "https://ctecg.co.za/ctecg_api/getCustomerData.php?customerid=" + id //2021
-      );
-      setBtnLoading(false);
-      const jsonData = await response.json();
-      setData(jsonData);
+
+      // Login Here because if login from Button then data doesn't come through. Yu need t press login again because the function is async
+      if (!id) {
+        toast("Please Enter Login Info.");
+        setBtnLoading(false);
+      } else {
+        // Fetching Login Details
+        const response = await fetch(
+          "https://ctecg.co.za/ctecg_api/getCustomerData.php?customerid=" + id //2021
+        );
+        setBtnLoading(false);
+        const jsonData = await response.json();
+
+        if (jsonData !== null && jsonData.customer_details.error == "") {
+          if (code.toUpperCase() == jsonData.customer_details.invoicingid) {
+            signIn(id);
+            console.log("Read");
+          } else {
+            toast("Incorrect Login Info.");
+            setCode("");
+            setId("");
+          }
+        } else {
+          toast("Unable to Connect.");
+        }
+      }
+
     } catch (error) {
       toast("Please Make Sure You Have Internet Access and Try Again.");
       setBtnLoading(false);
-    }
-  };
-
-  const handleSignIn = (id: string) => {
-    setBtnLoading(true);
-    if (!id) {
-      toast("Please Enter Login Info.");
-      setBtnLoading(false);
-    } else {
-      fetchData(id);
-      if (data !== null && data.customer_details.error == "") {
-        if (code.toUpperCase() == data.customer_details.invoicingid) {
-          signIn(id);
-        } else {
-          toast("Incorrect Login Info.")
-          setCode("");
-          setId("");
-        }
-      }
     }
   };
 

@@ -41,7 +41,7 @@ const Error = () => {
           btnBorder={true}
         />
         <Pressable onPress={() => signOut()} style={styles.btnBorder}>
-          <ThemedText>Sign In</ThemedText>
+          <ThemedText>Retry</ThemedText>
         </Pressable>
         <ThemedText style={{ textAlign: "center" }}>
           24/7 Support 076 979 0642
