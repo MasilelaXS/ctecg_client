@@ -155,7 +155,11 @@ export default function TabOneScreen() {
                       />
                     </View>
                   </View>
-                  <ThemedText style={styles.cardText}>Stable</ThemedText>
+                  {data.customer_details.status == "Current" ? (
+                    <ThemedText style={styles.cardText}>Connected</ThemedText>
+                  ) : (
+                    <ThemedText style={styles.cardText}>Suspended</ThemedText>
+                  )}
                 </View>
                 <ThemedView
                   lightColor="#cc0000"
