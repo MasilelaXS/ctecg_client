@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import {
   Image,
   View,
@@ -15,7 +15,7 @@ import Button from "@/components/Button";
 import { Ionicons } from "@expo/vector-icons";
 import Toast from "react-native-root-toast";
 import styles from "@/components/Styles";
-import { Link, router } from "expo-router";
+import { Link, router, useFocusEffect } from "expo-router";
 import { useAuth } from "@/context/Auth";
 import useToast from "@/components/toast";
 import Menu from "@/components/menu";
@@ -60,9 +60,10 @@ const Status = () => {
       router.replace("./error");
     } else {
       fetchData();
+      hideMenu();
     }
-    hideMenu();
   }, []);
+
   return (
     <ThemedView style={styles.container}>
       {loading ? (
@@ -154,7 +155,9 @@ const Status = () => {
               >
                 <View style={{ paddingHorizontal: 15, paddingVertical: 10 }}>
                   <View style={styles.cardHeadContainer}>
-                    <ThemedText style={styles.cardTitle}>Overage</ThemedText>
+                    <ThemedText style={styles.cardTitle}>
+                      Data Rollover
+                    </ThemedText>
                     <View style={styles.cardIcon}>
                       <Ionicons
                         name="arrow-redo-outline"
@@ -183,9 +186,7 @@ const Status = () => {
               >
                 <View style={{ paddingHorizontal: 15, paddingVertical: 10 }}>
                   <View style={styles.cardHeadContainer}>
-                    <ThemedText style={styles.cardTitle}>
-                      Today Download
-                    </ThemedText>
+                    <ThemedText style={styles.cardTitle}>Today</ThemedText>
                     <View style={styles.cardIcon}>
                       <Ionicons
                         name="arrow-down-outline"
@@ -195,7 +196,7 @@ const Status = () => {
                     </View>
                   </View>
                   <ThemedText style={styles.cardText}>
-                    {data.customer_details.d1down}
+                    {data.customer_details.d1}
                   </ThemedText>
                 </View>
                 <ThemedView
@@ -212,9 +213,7 @@ const Status = () => {
               >
                 <View style={{ paddingHorizontal: 15, paddingVertical: 10 }}>
                   <View style={styles.cardHeadContainer}>
-                    <ThemedText style={styles.cardTitle}>
-                      Today Upload
-                    </ThemedText>
+                    <ThemedText style={styles.cardTitle}>Week</ThemedText>
                     <View style={styles.cardIcon}>
                       <Ionicons
                         name="arrow-up-outline"
@@ -224,7 +223,7 @@ const Status = () => {
                     </View>
                   </View>
                   <ThemedText style={styles.cardText}>
-                    {data.customer_details.d1up}
+                    {data.customer_details.w1}
                   </ThemedText>
                 </View>
                 <ThemedView
@@ -235,81 +234,19 @@ const Status = () => {
               </ThemedView>
             </View>
 
-            <View style={styles.flexRow}>
-              {/* Internet Status */}
-              <ThemedView
-                style={styles.cardContainer}
-                lightColor="rgba(255, 193, 193,1)"
-                darkColor="rgba(250, 225, 225,.2)"
-              >
-                <View style={{ paddingHorizontal: 15, paddingVertical: 10 }}>
-                  <View style={styles.cardHeadContainer}>
-                    <ThemedText style={styles.cardTitle}>
-                      1 Week Download
-                    </ThemedText>
-                    <View style={styles.cardIcon}>
-                      <Ionicons
-                        name="arrow-down-outline"
-                        size={20}
-                        color={iconColor}
-                      />
-                    </View>
-                  </View>
-                  <ThemedText style={styles.cardText}>
-                    {data.customer_details.wdown}
-                  </ThemedText>
-                </View>
-                <ThemedView
-                  lightColor="#cc0000"
-                  darkColor="#ff5959"
-                  style={{ height: 4 }}
-                ></ThemedView>
-              </ThemedView>
-              {/* Account Status */}
-              <ThemedView
-                style={styles.cardContainer}
-                lightColor="rgba(255, 193, 193,1)"
-                darkColor="rgba(250, 225, 225,.2)"
-              >
-                <View style={{ paddingHorizontal: 15, paddingVertical: 10 }}>
-                  <View style={styles.cardHeadContainer}>
-                    <ThemedText style={styles.cardTitle}>
-                      1 Week Upload
-                    </ThemedText>
-                    <View style={styles.cardIcon}>
-                      <Ionicons
-                        name="arrow-up-outline"
-                        size={20}
-                        color={iconColor}
-                      />
-                    </View>
-                  </View>
-                  <ThemedText style={styles.cardText}>
-                    {data.customer_details.wup}
-                  </ThemedText>
-                </View>
-                <ThemedView
-                  lightColor="#cc0000"
-                  darkColor="#ff5959"
-                  style={{ height: 4 }}
-                ></ThemedView>
-              </ThemedView>
-            </View>
             {adLoaded ? (
-              <Link href="/fiber" asChild>
-                <Pressable style={{ marginTop: 15 }}>
-                  <Image
-                    source={{ uri: Ad }}
-                    style={{
-                      width: width * 0.92,
-                      height: 188,
-                      borderRadius: 15,
-                    }}
-                    resizeMode="contain"
-                    resizeMethod="scale"
-                  />
-                </Pressable>
-              </Link>
+              <Pressable style={{ marginTop: 15 }}>
+                <Image
+                  source={{ uri: Ad }}
+                  style={{
+                    width: width * 0.92,
+                    height: 188,
+                    borderRadius: 15,
+                  }}
+                  resizeMode="contain"
+                  resizeMethod="scale"
+                />
+              </Pressable>
             ) : null}
             <Button
               linkUrl="/offline"

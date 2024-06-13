@@ -99,6 +99,27 @@ const Menu = () => {
         </Pressable>
       </Link>
 
+      <Link
+        href="https://pay.yoco.com./mzanzi-lisetta-media-and-printing-ptyltd-ta-ctecg"
+        asChild
+      >
+        <Pressable onPress={() => hideMenu()}>
+          <View
+            style={[
+              styles.menuItem,
+              { borderBottomColor: borderColor, borderBottomWidth: 1 },
+            ]}
+          >
+            <Pressable>
+              <View>
+                <ThemedText>Pay Account</ThemedText>
+              </View>
+            </Pressable>
+            <Ionicons name="wallet-outline" color={iconColor} size={20} />
+          </View>
+        </Pressable>
+      </Link>
+
       <Pressable onPress={() => signOut()}>
         <View style={[styles.menuItem]}>
           <Pressable>

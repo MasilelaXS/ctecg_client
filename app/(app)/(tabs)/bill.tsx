@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import {
   Platform,
   View,
@@ -17,9 +17,10 @@ import { StatusBar } from "expo-status-bar";
 import { Ionicons } from "@expo/vector-icons";
 import styles from "@/components/Styles";
 import Ad from "@/assets/images/card.png";
-import { router } from "expo-router";
+import { router, useFocusEffect } from "expo-router";
 import { useAuth } from "@/context/Auth";
 import useToast from "@/components/toast";
+import Button from "@/components/Button";
 import Menu from "@/components/menu";
 
 type SendEmailParams = {
@@ -76,8 +77,8 @@ export default function Bill() {
       router.replace("./error");
     } else {
       fetchData();
+      hideMenu();
     }
-    hideMenu();
   }, []);
 
   // Function to send email
@@ -478,8 +479,14 @@ export default function Bill() {
                 </Pressable>
               </Link> */}
             </View>
+            {parseFloat(data.customer_details.statement.slice(1)) > 0 ? (
+              <Button
+                linkUrl="https://pay.yoco.com./mzanzi-lisetta-media-and-printing-ptyltd-ta-ctecg"
+                btnText="Pay Now"
+                btnBorder={false}
+              />
+            ) : null}
 
-            {/* <Button linkUrl="" btnText="Request Statement" btnBorder={false} /> */}
             {/* <Button linkUrl="" btnText="Hello World" btnBorder={false} />
           <Button linkUrl="" btnText="Hello World" btnBorder={true} /> */}
           </KeyboardAvoidingView>

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import {
   Image,
   View,
@@ -13,7 +13,7 @@ import { Text as ThemedText, View as ThemedView } from "@/components/Themed";
 import { StatusBar } from "expo-status-bar";
 import { Ionicons } from "@expo/vector-icons";
 import styles from "@/components/Styles";
-import { Link, router } from "expo-router";
+import { Link, router, useFocusEffect } from "expo-router";
 import { useAuth } from "@/context/Auth";
 import useToast from "@/components/toast";
 import Menu from "@/components/menu";
@@ -59,8 +59,8 @@ export default function TabOneScreen() {
       router.replace("./error");
     } else {
       fetchData();
+      hideMenu();
     }
-    hideMenu();
   }, []);
 
   return (
@@ -195,17 +195,15 @@ export default function TabOneScreen() {
             </View>
 
             {adLoaded ? (
-              <Link href="/modal" asChild>
-                <Pressable style={{ marginTop: 15 }}>
-                  <Image
-                    source={{ uri: Ad }}
-                    style={{ width: width * 0.92, height: 188 }}
-                    resizeMode="contain"
-                    resizeMethod="scale"
-                    onError={handleAdNotLoaded}
-                  />
-                </Pressable>
-              </Link>
+              <Pressable style={{ marginTop: 15 }}>
+                <Image
+                  source={{ uri: Ad }}
+                  style={{ width: width * 0.92, height: 188 }}
+                  resizeMode="contain"
+                  resizeMethod="scale"
+                  onError={handleAdNotLoaded}
+                />
+              </Pressable>
             ) : null}
             {/* <Button linkUrl="" btnText="Hello World" btnBorder={false} />
           <Button linkUrl="" btnText="Hello World" btnBorder={true} /> */}
