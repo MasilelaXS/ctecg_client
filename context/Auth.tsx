@@ -96,7 +96,6 @@ export function AuthProvider({ children }: PropsWithChildren<{}>) {
         userID,
         signIn,
         signOut: () => {
-          console.log("Signing out, current userID:", userID);
           setUserID(null);
           router.replace("/(auth)");
         },

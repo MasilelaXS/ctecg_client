@@ -14,8 +14,8 @@ const Menu = () => {
   const { hideMenu, signOut } = useAuth();
   return (
     <ThemedView
-      lightColor="rgba(248,248,247,.95)"
-      darkColor="rgba(46,46,51,.95)"
+      lightColor="rgba(248,248,247,.98)"
+      darkColor="rgba(46,46,51,.98)"
       style={styles.floatingMenu}
     >
       <View
@@ -35,67 +35,89 @@ const Menu = () => {
 
       <Link href="/modal" asChild>
         <Pressable onPress={() => hideMenu()}>
-          <View
-            style={[
-              styles.menuItem,
-              { borderBottomColor: borderColor, borderBottomWidth: 1 },
-            ]}
-          >
-            <View>
-              <ThemedText>Refer a Friend</ThemedText>
-            </View>
+          {({ pressed }) => (
+            <View
+              style={[
+                styles.menuItem,
+                {
+                  borderBottomColor: borderColor,
+                  borderBottomWidth: 1,
+                  opacity: pressed ? 0.5 : 1,
+                },
+              ]}
+            >
+              <View>
+                <ThemedText>Refer a Friend</ThemedText>
+              </View>
 
-            <Ionicons name="person-add-outline" color={iconColor} size={20} />
-          </View>
+              <Ionicons name="person-add-outline" color={iconColor} size={20} />
+            </View>
+          )}
         </Pressable>
       </Link>
 
       <Link href="/fiber" asChild>
         <Pressable onPress={() => hideMenu()}>
-          <View
-            style={[
-              styles.menuItem,
-              { borderBottomColor: borderColor, borderBottomWidth: 1 },
-            ]}
-          >
-            <View>
-              <ThemedText>Ugrade To Fibre</ThemedText>
+          {({ pressed }) => (
+            <View
+              style={[
+                styles.menuItem,
+                {
+                  borderBottomColor: borderColor,
+                  borderBottomWidth: 1,
+                  opacity: pressed ? 0.5 : 1,
+                },
+              ]}
+            >
+              <View>
+                <ThemedText>Ugrade To Fibre</ThemedText>
+              </View>
+              <Ionicons name="wifi-outline" color={iconColor} size={20} />
             </View>
-            <Ionicons name="wifi-outline" color={iconColor} size={20} />
-          </View>
+          )}
         </Pressable>
       </Link>
       <Link href="/offline" asChild>
         <Pressable onPress={() => hideMenu()}>
-          <View
-            style={[
-              styles.menuItem,
-              { borderBottomColor: borderColor, borderBottomWidth: 1 },
-            ]}
-          >
-            <View>
-              <ThemedText>Troubleshoot</ThemedText>
+          {({ pressed }) => (
+            <View
+              style={[
+                styles.menuItem,
+                {
+                  borderBottomColor: borderColor,
+                  borderBottomWidth: 1,
+                  opacity: pressed ? 0.5 : 1,
+                },
+              ]}
+            >
+              <View>
+                <ThemedText>Troubleshoot</ThemedText>
+              </View>
+              <Ionicons name="cellular-outline" color={iconColor} size={20} />
             </View>
-            <Ionicons name="cellular-outline" color={iconColor} size={20} />
-          </View>
+          )}
         </Pressable>
       </Link>
 
       <Link href="https://wa.me//27769790642" asChild>
         <Pressable onPress={() => hideMenu()}>
-          <View
-            style={[
-              styles.menuItem,
-              { borderBottomColor: borderColor, borderBottomWidth: 1 },
-            ]}
-          >
-            <Pressable>
+          {({ pressed }) => (
+            <View
+              style={[
+                styles.menuItem,
+                {
+                  borderBottomColor: borderColor,
+                  borderBottomWidth: 1,
+                  opacity: pressed ? 0.5 : 1,
+                },
+              ]}
+            >
               <View>
                 <ThemedText>Chat With Us</ThemedText>
               </View>
-            </Pressable>
-            <Ionicons name="logo-whatsapp" color={iconColor} size={20} />
-          </View>
+              <Ionicons name="logo-whatsapp" color={iconColor} size={20} />
+            </View>
+          )}
         </Pressable>
       </Link>
 
@@ -104,31 +126,44 @@ const Menu = () => {
         asChild
       >
         <Pressable onPress={() => hideMenu()}>
-          <View
-            style={[
-              styles.menuItem,
-              { borderBottomColor: borderColor, borderBottomWidth: 1 },
-            ]}
-          >
-            <Pressable>
+          {({ pressed }) => (
+            <View
+              style={[
+                styles.menuItem,
+                {
+                  borderBottomColor: borderColor,
+                  borderBottomWidth: 1,
+                  opacity: pressed ? 0.5 : 1,
+                },
+              ]}
+            >
               <View>
                 <ThemedText>Pay Account</ThemedText>
               </View>
-            </Pressable>
-            <Ionicons name="wallet-outline" color={iconColor} size={20} />
-          </View>
+              <Ionicons name="wallet-outline" color={iconColor} size={20} />
+            </View>
+          )}
         </Pressable>
       </Link>
 
       <Pressable onPress={() => signOut()}>
-        <View style={[styles.menuItem]}>
-          <Pressable>
+        {({ pressed }) => (
+          <View
+            style={[
+              styles.menuItem,
+              {
+                borderBottomColor: borderColor,
+                borderBottomWidth: 1,
+                opacity: pressed ? 0.5 : 1,
+              },
+            ]}
+          >
             <View>
               <ThemedText>Sign Out</ThemedText>
             </View>
-          </Pressable>
-          <Ionicons name="log-out-outline" color={iconColor} size={20} />
-        </View>
+            <Ionicons name="log-out-outline" color={iconColor} size={20} />
+          </View>
+        )}
       </Pressable>
     </ThemedView>
   );

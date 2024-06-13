@@ -107,14 +107,14 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   floatingMenu: {
-    width: viewWidth * 0.8,
+    width: viewWidth * 0.95,
+    height: "100%",
     position: "absolute",
     zIndex: 10,
     padding: 15,
     borderRadius: 10,
     alignItems: "center",
     alignSelf: "center",
-    top: viewHeight / 4,
     shadowOpacity: 0.3,
     shadowRadius: 4,
     elevation: 5, // for Android
