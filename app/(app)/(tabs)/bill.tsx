@@ -1,8 +1,7 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import {
   Platform,
   View,
-  Alert,
   useColorScheme,
   ImageBackground,
   ActivityIndicator,
@@ -17,7 +16,7 @@ import { StatusBar } from "expo-status-bar";
 import { Ionicons } from "@expo/vector-icons";
 import styles from "@/components/Styles";
 import Ad from "@/assets/images/card.png";
-import { router, useFocusEffect } from "expo-router";
+import { router } from "expo-router";
 import { useAuth } from "@/context/Auth";
 import useToast from "@/components/toast";
 import Button from "@/components/Button";

@@ -97,7 +97,7 @@ export function AuthProvider({ children }: PropsWithChildren<{}>) {
         signIn,
         signOut: () => {
           setUserID(null);
-          router.replace("/(auth)");
+          router.replace("/(auth)/login");
         },
         hideMenu: () => SetShowMenu(false),
         showMenu: () => SetShowMenu(true),

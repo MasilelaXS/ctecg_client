@@ -11,7 +11,6 @@ import {
 import { Text as ThemedText, View as ThemedView } from "@/components/Themed";
 import styles from "@/components/Styles";
 import { useState } from "react";
-import Toast from "react-native-root-toast";
 import { useAuth } from "@/context/Auth";
 import useToast from "@/components/toast";
 

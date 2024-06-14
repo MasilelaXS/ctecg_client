@@ -6,12 +6,10 @@ import {
   TextInput,
   Pressable,
   View,
-  Linking,
 } from "react-native";
 import { Text as ThemedText, View as ThemedView } from "@/components/Themed";
 import styles from "@/components/Styles";
 import { Ionicons } from "@expo/vector-icons";
-import Toast from "react-native-root-toast";
 import { useState } from "react";
 import { useAuth } from "@/context/Auth";
 import useToast from "@/components/toast";
@@ -106,8 +104,11 @@ export default function ModalScreen() {
   };
 
   const informationModal = () =>
-    toast(`Our fiber connection is currently available exclusively in Groblersdal. However, we are excited to announce that we will be expanding to new areas very soon. Stay tuned for more updates as we bring high-speed connectivity to more communities in the near future!`, true);
-     
+    toast(
+      `Our fiber connection is currently available exclusively in Groblersdal. However, we are excited to announce that we will be expanding to new areas very soon. Stay tuned for more updates as we bring high-speed connectivity to more communities in the near future!`,
+      true
+    );
+
   return (
     <ThemedView style={styles.container}>
       <ScrollView>

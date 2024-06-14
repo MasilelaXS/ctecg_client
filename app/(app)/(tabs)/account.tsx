@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import {
   Image,
   View,
@@ -17,7 +17,7 @@ import Icon from "@/assets/images/user.png";
 import { useAuth } from "@/context/Auth";
 import useToast from "@/components/toast";
 import Menu from "@/components/menu";
-import { useFocusEffect, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 
 const Account = () => {
   let colorScheme = useColorScheme();

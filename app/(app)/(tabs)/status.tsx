@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import {
   Image,
   View,
@@ -13,9 +13,8 @@ import { Text as ThemedText, View as ThemedView } from "@/components/Themed";
 import { StatusBar } from "expo-status-bar";
 import Button from "@/components/Button";
 import { Ionicons } from "@expo/vector-icons";
-import Toast from "react-native-root-toast";
 import styles from "@/components/Styles";
-import { Link, router, useFocusEffect } from "expo-router";
+import { router } from "expo-router";
 import { useAuth } from "@/context/Auth";
 import useToast from "@/components/toast";
 import Menu from "@/components/menu";

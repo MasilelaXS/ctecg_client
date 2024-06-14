@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import {
   Image,
   View,
@@ -13,7 +13,7 @@ import { Text as ThemedText, View as ThemedView } from "@/components/Themed";
 import { StatusBar } from "expo-status-bar";
 import { Ionicons } from "@expo/vector-icons";
 import styles from "@/components/Styles";
-import { Link, router, useFocusEffect } from "expo-router";
+import { Link, router } from "expo-router";
 import { useAuth } from "@/context/Auth";
 import useToast from "@/components/toast";
 import Menu from "@/components/menu";

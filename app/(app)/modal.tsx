@@ -8,11 +8,9 @@ import {
   View,
   Alert,
   Pressable,
-  Text,
 } from "react-native";
 import { Text as ThemedText, View as ThemedView } from "@/components/Themed";
 import styles from "@/components/Styles";
-import Toast from "react-native-root-toast";
 import { useState } from "react";
 import { useAuth } from "@/context/Auth";
 import useToast from "@/components/toast";
