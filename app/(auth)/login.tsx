@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Image,
   View,
@@ -16,6 +16,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useAuth } from "@/context/Auth";
 import useToast from "@/components/toast";
 import { useRouter } from "expo-router";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Login = () => {
   const [data, setData] = useState<any>(null);
@@ -24,8 +25,18 @@ const Login = () => {
   const [btnLoading, setBtnLoading] = useState<boolean>(false);
   const toast = useToast();
   const router = useRouter();
+  const [username, setUsername] = useState<string | null>(null);
 
   const { signIn, connection } = useAuth();
+
+  useEffect(() => {
+    const getUname = async () => {
+      const storedName = await AsyncStorage.getItem("username");
+      setUsername(storedName);
+    };
+
+    getUname();
+  }, []);
 
   // Mock fetchData function for demonstration
   const handleSignIn = async (id: string) => {
@@ -48,6 +59,15 @@ const Login = () => {
 
           if (jsonData !== null && jsonData.customer_details.error == "") {
             if (code.toUpperCase() == jsonData.customer_details.invoicingid) {
+              if (
+                username == null ||
+                username !== jsonData.customer_details.name
+              ) {
+                await AsyncStorage.setItem(
+                  "username",
+                  jsonData.customer_details.name
+                );
+              }
               signIn(id);
             } else {
               toast("Incorrect Login Info.", false);
@@ -89,17 +109,29 @@ const Login = () => {
             resizeMode="contain"
             resizeMethod="scale"
           />
-
-          <ThemedText
-            style={{
-              fontWeight: "200",
-              fontSize: 25,
-              marginTop: 45,
-              width: "100%",
-            }}
-          >
-            Let's Login
-          </ThemedText>
+          {username !== null ? (
+            <ThemedText
+              style={{
+                fontWeight: "200",
+                fontSize: 25,
+                marginTop: 45,
+                width: "100%",
+              }}
+            >
+              Hi {username}, Welcome Back.
+            </ThemedText>
+          ) : (
+            <ThemedText
+              style={{
+                fontWeight: "200",
+                fontSize: 25,
+                marginTop: 45,
+                width: "100%",
+              }}
+            >
+              Let's Login
+            </ThemedText>
+          )}
 
           <View
             style={[

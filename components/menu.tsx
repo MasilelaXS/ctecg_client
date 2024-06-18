@@ -1,6 +1,7 @@
 import { View, Text, useColorScheme, Pressable } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Text as ThemedText, View as ThemedView } from "@/components/Themed";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Ionicons } from "@expo/vector-icons";
 import styles from "@/components/Styles";
 import { useAuth } from "@/context/Auth";
@@ -10,6 +11,16 @@ const Menu = () => {
   let colorScheme = useColorScheme();
   let iconColor = colorScheme === "dark" ? "white" : "black";
   let borderColor = colorScheme === "dark" ? "#434349" : "#E6E6E8";
+  const [username, setUsername] = useState<string | null>();
+
+  useEffect(() => {
+    const getUname = async () => {
+      const storedName = await AsyncStorage.getItem("username");
+      setUsername(storedName);
+    };
+
+    getUname();
+  }, []);
 
   const { hideMenu, signOut } = useAuth();
   return (
@@ -27,7 +38,15 @@ const Menu = () => {
           marginBottom: 15,
         }}
       >
-        <ThemedText style={styles.cardTitle}>Menu</ThemedText>
+        {username !== null ? (
+          <View>
+            <ThemedText style={{ fontSize: 16, fontWeight: "300" }}>
+              Hi {username}
+            </ThemedText>
+          </View>
+        ) : (
+          <ThemedText style={styles.cardTitle}>Menu</ThemedText>
+        )}
         <Pressable onPress={() => hideMenu()}>
           <Ionicons name="close-outline" color={iconColor} size={25} />
         </Pressable>
