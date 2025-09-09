@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
+import { View, Text, Image, StyleSheet } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import * as Font from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import { Ionicons } from '@expo/vector-icons';
@@ -9,9 +11,32 @@ import { AuthProvider, useAuth } from './src/contexts/AuthContext';
 import AppNavigator from './src/navigation/AppNavigator';
 import LoginScreen from './src/screens/LoginScreen';
 import LoadingSpinner from './src/components/LoadingSpinner';
+import { Colors, Typography, Spacing } from './src/constants/Design';
 
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync();
+
+// Custom Splash Screen Component
+function CustomSplashScreen() {
+  return (
+    <SafeAreaView style={splashStyles.container}>
+      <View style={splashStyles.content}>
+        <Image 
+          source={require('./assets/splash.png')} 
+          style={splashStyles.logo}
+          resizeMode="contain"
+        />
+        <Text style={splashStyles.title}>My CTECG</Text>
+        <Text style={splashStyles.subtitle}>Your Connection, Your Control</Text>
+      </View>
+      <View style={splashStyles.footer}>
+        <Text style={splashStyles.footerText}>
+          created with ❤︎ by Dannel Web Design
+        </Text>
+      </View>
+    </SafeAreaView>
+  );
+}
 
 function AppContent() {
   const { user, isLoading } = useAuth();
@@ -40,7 +65,7 @@ function AppContent() {
   }, []);
 
   if (!appIsReady || isLoading) {
-    return <LoadingSpinner message="Loading..." />;
+    return <CustomSplashScreen />;
   }
 
   return (
@@ -55,8 +80,48 @@ export default function App() {
     <SafeAreaProvider>
       <AuthProvider>
         <AppContent />
-        <StatusBar style="auto" />
+        <StatusBar style="dark" backgroundColor="#ffffff" />
       </AuthProvider>
     </SafeAreaProvider>
   );
 }
+
+const splashStyles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: Colors.background,
+  },
+  content: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: Spacing.lg,
+  },
+  logo: {
+    width: 120,
+    height: 120,
+    marginBottom: Spacing.lg,
+  },
+  title: {
+    fontSize: Typography.xxxl,
+    fontWeight: Typography.weights.bold,
+    color: Colors.text,
+    textAlign: 'center',
+    marginBottom: Spacing.xs,
+  },
+  subtitle: {
+    fontSize: Typography.md,
+    color: Colors.textSecondary,
+    textAlign: 'center',
+  },
+  footer: {
+    paddingBottom: Spacing.xl,
+    alignItems: 'center',
+  },
+  footerText: {
+    fontSize: Typography.sm,
+    color: Colors.textSecondary,
+    textAlign: 'center',
+    fontStyle: 'italic',
+  },
+});

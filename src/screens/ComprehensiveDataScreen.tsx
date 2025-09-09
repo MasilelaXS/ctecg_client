@@ -156,7 +156,7 @@ export default function ComprehensiveDataScreen() {
             <Text style={styles.infoLabel}>Package:</Text>
             <Text style={styles.infoValue}>{customerData.package}</Text>
           </View>
-          <View style={styles.infoRow}>
+          <View style={[styles.infoRow, styles.lastInfoRow]}>
             <Text style={styles.infoLabel}>Status:</Text>
             <Text style={[styles.infoValue, { color: getStatusColor(customerData.status) }]}>
               {customerData.status}
@@ -351,6 +351,9 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     borderBottomWidth: 1,
     borderBottomColor: '#f0f0f0',
+  },
+  lastInfoRow: {
+    borderBottomWidth: 0,
   },
   infoLabel: {
     fontSize: 14,

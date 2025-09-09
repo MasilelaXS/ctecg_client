@@ -8,6 +8,7 @@ import {
   Alert,
   TouchableOpacity,
   TextInput,
+  Linking,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -15,11 +16,13 @@ import TopNavigation from '../components/TopNavigation';
 import Card from '../components/Card';
 import LoadingSpinner from '../components/LoadingSpinner';
 import PaymentWebView from '../components/PaymentWebView';
+import { useAuth } from '../contexts/AuthContext';
 import { apiService } from '../services/api';
 import { DetailedBillingData, BillingInvoice, PaymentInfo } from '../types/api';
 import { Colors, Typography, Spacing, CommonStyles } from '../constants/Design';
 
 export default function BillingScreen() {
+  const { user } = useAuth();
   const [billingData, setBillingData] = useState<DetailedBillingData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -543,8 +546,8 @@ export default function BillingScreen() {
     });
   };
 
-  const renderInvoiceItem = (invoice: BillingInvoice) => (
-    <View key={invoice.invoice_number} style={styles.invoiceItem}>
+  const renderInvoiceItem = (invoice: BillingInvoice, index: number, array: BillingInvoice[]) => (
+    <View key={invoice.invoice_number} style={[styles.invoiceItem, index === array.length - 1 && styles.lastItem]}>
       <View style={styles.invoiceHeader}>
         <Text style={styles.invoiceNumber}>#{invoice.invoice_number}</Text>
         <View style={[styles.statusBadge, { backgroundColor: getStatusColor(invoice.status) }]}>
@@ -806,6 +809,56 @@ export default function BillingScreen() {
               </View>
             </Card>
 
+            {/* Alternative Payment Methods */}
+            <Card title="Alternative Payment Methods">
+              <View style={styles.paymentSection}>
+                <TouchableOpacity 
+                  style={[styles.altPaymentButton, { backgroundColor: '#1976D2' }]}
+                  onPress={() => {
+                    Alert.alert(
+                      'Yoco Payment',
+                      'You will be redirected to Yoco\'s secure payment portal.',
+                      [
+                        {
+                          text: 'Open Yoco',
+                          onPress: async () => {
+                            const yocoUrl = 'https://pay.yoco.com/mzanzi-lisetta-media-and-printing-ptyltd-ta-ctecg';
+                            try {
+                              await Linking.openURL(yocoUrl);
+                            } catch (error) {
+                              Alert.alert('Error', 'Could not open payment link');
+                            }
+                          }
+                        },
+                        { text: 'Cancel', style: 'cancel' }
+                      ]
+                    );
+                  }}
+                >
+                  <Ionicons name="card" size={20} color="white" />
+                  <Text style={styles.altPaymentButtonText}>Pay via Yoco</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity 
+                  style={[styles.altPaymentButton, { backgroundColor: '#4CAF50' }]}
+                  onPress={() => {
+                    Alert.alert(
+                      'EFT Banking Details',
+                      `Bank: FNB\nAccount Name: Mzanzi Lisette Media and Printing (pty) ltd\nAccount Type: Cheque\nAccount Number: 62144198737 (COPY THIS)\nBranch Code: 260147\n\nReference: ${user?.invoicingid || 'Your account number'}`,
+                      [{ text: 'OK' }]
+                    );
+                  }}
+                >
+                  <Ionicons name="business" size={20} color="white" />
+                  <Text style={styles.altPaymentButtonText}>EFT Transfer</Text>
+                </TouchableOpacity>
+
+                <Text style={styles.paymentNote}>
+                  Choose your preferred payment method above or use the PayFast option for instant processing.
+                </Text>
+              </View>
+            </Card>
+
             {/* Billing Information */}
             <Card title="Billing Information">
               <View style={styles.billingInfo}>
@@ -908,7 +961,7 @@ export default function BillingScreen() {
 
             {/* Recent Invoices */}
             <Card title="Recent Invoices" subtitle="Last 6 invoices">
-              {invoices.recent_invoices.map(renderInvoiceItem)}
+              {invoices.recent_invoices.map((invoice, index, array) => renderInvoiceItem(invoice, index, array))}
             </Card>
           </>
         )}
@@ -918,13 +971,13 @@ export default function BillingScreen() {
             {/* Unpaid Invoices */}
             {invoices.unpaid_invoices.length > 0 && (
               <Card title="Unpaid Invoices" variant="highlight">
-                {invoices.unpaid_invoices.map(renderInvoiceItem)}
+                {invoices.unpaid_invoices.map((invoice, index, array) => renderInvoiceItem(invoice, index, array))}
               </Card>
             )}
 
             {/* Latest Invoices */}
             <Card title="Latest Invoices" subtitle="Last 6 invoices">
-              {invoices.all_invoices.map(renderInvoiceItem)}
+              {invoices.all_invoices.map((invoice, index, array) => renderInvoiceItem(invoice, index, array))}
             </Card>
           </>
         )}
@@ -1100,6 +1153,9 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: Colors.border,
   },
+  lastItem: {
+    borderBottomWidth: 0,
+  },
   invoiceHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -1216,5 +1272,19 @@ const styles = StyleSheet.create({
     fontSize: Typography.sm,
     color: Colors.text,
     fontWeight: Typography.weights.medium,
+  },
+  altPaymentButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: Spacing.md,
+    borderRadius: 8,
+    marginBottom: Spacing.sm,
+    gap: Spacing.xs,
+  },
+  altPaymentButtonText: {
+    color: 'white',
+    fontSize: Typography.md,
+    fontWeight: Typography.weights.semibold,
   },
 });

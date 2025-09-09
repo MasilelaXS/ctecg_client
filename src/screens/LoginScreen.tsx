@@ -9,6 +9,8 @@ import {
   ScrollView,
   TouchableOpacity,
   Alert,
+  Image,
+  Linking,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -37,6 +39,15 @@ export default function LoginScreen() {
   const [step, setStep] = useState<'check-user' | 'login' | 'register'>('check-user');
   const [userData, setUserData] = useState<CheckUserData | null>(null);
   const { login } = useAuth();
+
+  const handleContactSupport = async () => {
+    const whatsappUrl = 'https://wa.me/27769790642';
+    try {
+      await Linking.openURL(whatsappUrl);
+    } catch (error) {
+      Alert.alert('Error', 'Could not open WhatsApp. Please contact support at +27 76 979 0642');
+    }
+  };
 
   const handleCheckUser = async () => {
     if (!invoicingId.trim()) {
@@ -213,6 +224,11 @@ export default function LoginScreen() {
           {/* Header Section */}
           <View style={styles.header}>
             <View style={styles.logoContainer}>
+              <Image 
+                source={require('../../assets/icon.png')} 
+                style={styles.logoImage}
+                resizeMode="contain"
+              />
               <Text style={styles.logoText}>My CTECG</Text>
               <Text style={styles.tagline}>Your Connection, Your Control</Text>
             </View>
@@ -313,9 +329,14 @@ export default function LoginScreen() {
 
           {/* Footer */}
           <View style={styles.footer}>
-            <Text style={styles.footerText}>
-              Need help?{' '}
-              <Text style={styles.footerLinkText}>Contact Support</Text>
+            <View style={styles.footerTextContainer}>
+              <Text style={styles.footerText}>Need help? </Text>
+              <TouchableOpacity onPress={handleContactSupport} style={styles.supportLink}>
+                <Text style={styles.footerLinkText}>Contact Support</Text>
+              </TouchableOpacity>
+            </View>
+            <Text style={styles.createdByText}>
+              created with ❤︎ by Dannel Web Design
             </Text>
           </View>
         </ScrollView>
@@ -343,6 +364,11 @@ const styles = StyleSheet.create({
   },
   logoContainer: {
     alignItems: 'center',
+    marginBottom: Spacing.md,
+  },
+  logoImage: {
+    width: 80,
+    height: 80,
     marginBottom: Spacing.md,
   },
   logoText: {
@@ -467,6 +493,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: Spacing.lg,
   },
+  footerTextContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   footerText: {
     fontSize: Typography.sm,
     color: Colors.textSecondary,
@@ -475,5 +506,15 @@ const styles = StyleSheet.create({
   footerLinkText: {
     color: Colors.primary,
     fontWeight: Typography.weights.semibold,
+  },
+  supportLink: {
+    // No additional styles needed for TouchableOpacity in this context
+  },
+  createdByText: {
+    fontSize: Typography.xs,
+    color: Colors.textMuted,
+    textAlign: 'center',
+    marginTop: Spacing.sm,
+    fontStyle: 'italic',
   },
 });

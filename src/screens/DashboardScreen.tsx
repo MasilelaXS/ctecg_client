@@ -182,12 +182,36 @@ export default function DashboardScreen() {
       'Choose how you would like to pay your bill:',
       [
         {
-          text: 'Online Banking',
+          text: 'EFT',
           onPress: () => {
             Alert.alert(
-              'Online Banking Details',
-              'Bank: FNB\nAccount Name: CTECG\nAccount Number: 123456789\nBranch Code: 250655\n\nReference: Your account number',
+              'EFT Banking Details',
+              `Bank: FNB\nAccount Name: Mzanzi Lisette Media and Printing (pty) ltd\nAccount Type: Cheque\nAccount Number: 62144198737 (COPY THIS)\nBranch Code: 260147\n\nReference: ${user?.invoicingid || 'Your account number'}`,
               [{ text: 'OK' }]
+            );
+          }
+        },
+        {
+          text: 'Yoco Payment',
+          onPress: () => {
+            Alert.alert(
+              'Yoco Payment',
+              'You will be redirected to Yoco\'s secure payment portal.',
+              [
+                {
+                  text: 'Open Yoco',
+                  onPress: async () => {
+                    // Open the Yoco payment link
+                    const yocoUrl = 'https://pay.yoco.com/mzanzi-lisetta-media-and-printing-ptyltd-ta-ctecg';
+                    try {
+                      await Linking.openURL(yocoUrl);
+                    } catch (error) {
+                      Alert.alert('Error', 'Could not open payment link');
+                    }
+                  }
+                },
+                { text: 'Cancel', style: 'cancel' }
+              ]
             );
           }
         },
@@ -382,8 +406,11 @@ export default function DashboardScreen() {
         {/* Recent Invoices */}
         {(dashboardData?.recent_payments?.length || 0) > 0 && (
           <Card title="Recent Invoices">
-            {dashboardData?.recent_payments.slice(0, 3).map((invoice: any) => (
-              <View key={invoice.invoice_number} style={styles.invoiceItem}>
+            {dashboardData?.recent_payments.slice(0, 3).map((invoice: any, index: number, array: any[]) => (
+              <View key={invoice.invoice_number} style={[
+                styles.invoiceItem,
+                index === array.length - 1 && styles.lastItem
+              ]}>
                 <View style={styles.invoiceHeader}>
                   <Text style={styles.invoiceNumber}>#{invoice.invoice_number}</Text>
                   <Text style={[styles.invoiceStatus, { 
@@ -404,8 +431,11 @@ export default function DashboardScreen() {
         {/* Support Tickets */}
         {(dashboardData?.active_tickets?.length || 0) > 0 && (
           <Card title="Recent Support Tickets">
-            {dashboardData?.active_tickets.map((ticket: any) => (
-              <View key={ticket.id} style={styles.ticketItem}>
+            {dashboardData?.active_tickets.map((ticket: any, index: number, array: any[]) => (
+              <View key={ticket.id} style={[
+                styles.ticketItem,
+                index === array.length - 1 && styles.lastItem
+              ]}>
                 <View style={styles.ticketHeader}>
                   <Text style={styles.ticketTitle}>{ticket.title}</Text>
                   <Text style={[styles.ticketStatus, { color: getStatusColor(ticket.status) }]}>
@@ -665,5 +695,8 @@ const styles = StyleSheet.create({
   invoiceDate: {
     fontSize: Typography.sm,
     color: Colors.textSecondary,
+  },
+  lastItem: {
+    borderBottomWidth: 0,
   },
 });

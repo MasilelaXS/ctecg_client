@@ -26,7 +26,7 @@ export default function UncappedUsageCard({
             </View>
             <View style={styles.unlimitedTextContainer}>
               <Text style={styles.unlimitedLabel}>Unlimited Data</Text>
-              <Text style={styles.packageLabel}>{packageName}</Text>
+              <Text style={styles.packageLabel} numberOfLines={1} ellipsizeMode="tail">{packageName}</Text>
             </View>
           </View>
         </View>
@@ -38,7 +38,7 @@ export default function UncappedUsageCard({
             <Text style={styles.usageValue}>{downloadGb.toFixed(1)} GB</Text>
           </View>
           
-          <View style={styles.usageRow}>
+          <View style={[styles.usageRow, styles.uploadedRow]}>
             <Text style={styles.usageLabel}>Uploaded</Text>
             <Text style={styles.usageValue}>{uploadGb.toFixed(1)} GB</Text>
           </View>
@@ -84,6 +84,8 @@ const styles = StyleSheet.create({
   },
   unlimitedTextContainer: {
     alignItems: 'flex-start',
+    flex: 1,
+    paddingRight: 8,
   },
   unlimitedLabel: {
     fontSize: 18,
@@ -95,6 +97,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#666666',
     fontWeight: '500',
+    width: '100%',
   },
   usageSection: {
     // No additional margin needed
@@ -106,6 +109,9 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     borderBottomWidth: 1,
     borderBottomColor: '#F0F0F0',
+  },
+  uploadedRow: {
+    borderBottomWidth: 0,
   },
   totalRow: {
     borderBottomWidth: 0,
