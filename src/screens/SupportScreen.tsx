@@ -9,6 +9,7 @@ import {
   Alert,
   ActivityIndicator 
 } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import TopNavigation from '../components/TopNavigation';
@@ -46,64 +47,13 @@ const CATEGORY_OPTIONS: CategoryOption[] = [
   { value: 'Feature Request', label: 'Feature Request', icon: 'bulb' },
 ];
 
-const FAQ_DATA = [
-  {
-    question: "What are my email server settings?",
-    answer: "If you have a ctecg.co.za email address and are using CTECG Internet:\n• Incoming mail server: mail.ctecg.co.za\n• Outgoing mail server: 10.1.8.2\n\nFor configuration help, contact our technical support team."
-  },
-  {
-    question: "Why does my Internet connection keep disconnecting?",
-    answer: "The most common cause is power variations - either low or high power supply to the equipment. We recommend:\n• Installing a UPS to protect equipment and prevent connection issues\n• Checking all power connections are secure\n• Ensuring your router is in a well-ventilated area"
-  },
-  {
-    question: "How do I reboot my Internet connection?",
-    answer: "To reboot your connection:\n1. Switch off the power to your router/modem for 1-2 minutes\n2. Turn the power back on\n3. Wait about 30 seconds for the system to boot up\n4. Check that all indicator lights are stable before testing your connection"
-  },
-  {
-    question: "What internet packages do you offer?",
-    answer: "We offer comprehensive internet solutions:\n• Capped packages starting at R99/month for 5GB\n• Uncapped packages starting at R450/month\n• Fibre and LTE options available\n• Business packages with dedicated support\n• Custom solutions for specific needs"
-  },
-  {
-    question: "How many devices can use my connection?",
-    answer: "The number of devices depends on your package:\n• More simultaneous connections require more bandwidth\n• Each device uses bandwidth for updates, anti-virus software, etc.\n• We can help you determine the right package based on your usage\n• Business packages support more devices with priority support"
-  },
-  {
-    question: "How do I check my internet speed?",
-    answer: "For accurate speed testing:\n1. Close all applications using bandwidth\n2. Ensure no other devices are using the connection\n3. Use our recommended test: www.speedtest.neotel.co.za\n4. Run multiple tests at different times for average results\n\nNote: Results may vary based on distance from test servers and network conditions."
-  },
-  {
-    question: "Are there data limits on uncapped packages?",
-    answer: "Our Uncapped packages have no data limits or 'capping':\n• Unlimited data usage\n• No throttling after certain usage\n• Fair usage policy applies for network stability\n• Starting at R450/month\n• Perfect for streaming, gaming, and heavy internet use"
-  },
-  {
-    question: "How does weather affect my connection?",
-    answer: "Weather generally doesn't affect connection quality, but:\n• We recommend unplugging equipment during thunderstorms\n• Lightning can cause damage to electronic equipment\n• Heavy rain rarely affects wireless signals\n• Our equipment is designed for South African weather conditions"
-  },
-  {
-    question: "What technical support do you provide?",
-    answer: "Comprehensive support services:\n• 24/7 helpdesk: helpdesk@ctecg.co.za\n• Phone support: +27 76 979 0642\n• WhatsApp support available\n• On-site technical visits when needed\n• Remote troubleshooting and configuration\n• Network optimization and security advice"
-  },
-  {
-    question: "How do I report service outages?",
-    answer: "Report outages through multiple channels:\n• This app's support form (priority: urgent)\n• Phone: +27 76 979 0642\n• Email: helpdesk@ctecg.co.za\n• WhatsApp: 076 979 0642\n• Our team monitors network status 24/7 and provides updates on repairs"
-  },
-  {
-    question: "What cybersecurity services do you offer?",
-    answer: "Complete cybersecurity solutions:\n• Content filtering and parental controls\n• Firewall configuration and management\n• Patch and asset management\n• Security monitoring and threat detection\n• Employee cybersecurity training\n• Regular security audits and updates"
-  },
-  {
-    question: "Do you offer business solutions?",
-    answer: "Comprehensive business services:\n• Dedicated internet connections\n• VoIP managed solutions\n• Network infrastructure setup\n• CCTV camera installations\n• Bulk SMS solutions\n• Hotspot WiFi management\n• 24/7 priority technical support"
-  }
-];
-
 export default function SupportScreen() {
+  const navigation = useNavigation();
   const [subject, setSubject] = useState('');
   const [message, setMessage] = useState('');
   const [priority, setPriority] = useState<'low' | 'medium' | 'high' | 'urgent'>('medium');
   const [category, setCategory] = useState('Technical Support');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [expandedFAQ, setExpandedFAQ] = useState<number | null>(null);
 
   const handleSubmit = async () => {
     // Validation
@@ -155,10 +105,6 @@ export default function SupportScreen() {
     } finally {
       setIsSubmitting(false);
     }
-  };
-
-  const toggleFAQ = (index: number) => {
-    setExpandedFAQ(expandedFAQ === index ? null : index);
   };
 
   return (
@@ -299,30 +245,26 @@ export default function SupportScreen() {
           </View>
         </Card>
 
-        {/* FAQ Section */}
+        {/* FAQ Link Card */}
         <Card title="Frequently Asked Questions">
-          <View style={styles.faqContainer}>
-            {FAQ_DATA.map((faq, index) => (
-              <View key={index} style={styles.faqItem}>
-                <TouchableOpacity 
-                  style={styles.faqQuestionContainer}
-                  onPress={() => toggleFAQ(index)}
-                  activeOpacity={0.7}
-                >
-                  <Text style={styles.faqQuestion}>{faq.question}</Text>
-                  <Ionicons 
-                    name={expandedFAQ === index ? "chevron-up" : "chevron-down"} 
-                    size={16} 
-                    color={Colors.textMuted} 
-                  />
-                </TouchableOpacity>
-                {expandedFAQ === index && (
-                  <View style={styles.faqAnswer}>
-                    <Text style={styles.faqAnswerText}>{faq.answer}</Text>
-                  </View>
-                )}
+          <View style={styles.faqLinkContainer}>
+            <TouchableOpacity 
+              style={styles.faqLinkButton}
+              onPress={() => navigation.navigate('FAQ' as never)}
+              activeOpacity={0.7}
+            >
+              <View style={styles.faqLinkContent}>
+                <Ionicons name="help-circle" size={24} color={Colors.primary} />
+                <View style={styles.faqLinkTextContainer}>
+                  <Text style={styles.faqLinkTitle}>View All FAQs</Text>
+                  <Text style={styles.faqLinkSubtitle}>
+                    Find answers to common questions about our services, 
+                    technical support, billing, and more.
+                  </Text>
+                </View>
+                <Ionicons name="chevron-forward" size={20} color={Colors.textMuted} />
               </View>
-            ))}
+            </TouchableOpacity>
           </View>
         </Card>
       </ScrollView>
@@ -443,35 +385,33 @@ const styles = StyleSheet.create({
     fontWeight: Typography.weights.semibold,
     color: Colors.surface,
   },
-  faqContainer: {
-    gap: Spacing.sm,
+  faqLinkContainer: {
+    padding: Spacing.sm,
   },
-  faqItem: {
+  faqLinkButton: {
     backgroundColor: Colors.background,
-    borderRadius: 8,
-    overflow: 'hidden',
+    borderRadius: 12,
+    padding: Spacing.md,
+    borderWidth: 1,
+    borderColor: Colors.border,
   },
-  faqQuestionContainer: {
+  faqLinkContent: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    padding: Spacing.md,
+    gap: Spacing.md,
   },
-  faqQuestion: {
-    fontSize: Typography.md,
-    color: Colors.text,
+  faqLinkTextContainer: {
     flex: 1,
-    fontWeight: Typography.weights.medium,
   },
-  faqAnswer: {
-    paddingHorizontal: Spacing.md,
-    paddingBottom: Spacing.md,
-    borderTopWidth: 1,
-    borderTopColor: Colors.border,
+  faqLinkTitle: {
+    fontSize: Typography.md,
+    fontWeight: Typography.weights.semibold,
+    color: Colors.text,
+    marginBottom: Spacing.xs,
   },
-  faqAnswerText: {
+  faqLinkSubtitle: {
     fontSize: Typography.sm,
     color: Colors.textMuted,
-    lineHeight: 20,
+    lineHeight: 18,
   },
 });

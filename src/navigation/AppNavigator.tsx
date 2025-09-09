@@ -1,6 +1,7 @@
 import React from 'react';
 import { TouchableWithoutFeedback, View } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import DashboardScreen from '../screens/DashboardScreen';
@@ -8,11 +9,13 @@ import UsageScreen from '../screens/UsageScreen';
 import BillingScreen from '../screens/BillingScreen';
 import SupportScreen from '../screens/SupportScreen';
 import OutageScreen from '../screens/OutageScreen';
+import FAQScreen from '../screens/FAQScreen';
 import { Colors, Typography } from '../constants/Design';
 
 const Tab = createBottomTabNavigator();
+const Stack = createNativeStackNavigator();
 
-export default function AppNavigator() {
+function TabNavigator() {
   const insets = useSafeAreaInsets();
   
   return (
@@ -74,5 +77,19 @@ export default function AppNavigator() {
       <Tab.Screen name="Outages" component={OutageScreen} />
       <Tab.Screen name="Support" component={SupportScreen} />
     </Tab.Navigator>
+  );
+}
+
+export default function AppNavigator() {
+  return (
+    <Stack.Navigator 
+      screenOptions={{ 
+        headerShown: false,
+        animation: 'slide_from_right'
+      }}
+    >
+      <Stack.Screen name="MainTabs" component={TabNavigator} />
+      <Stack.Screen name="FAQ" component={FAQScreen} />
+    </Stack.Navigator>
   );
 }

@@ -10,16 +10,27 @@ import {
 } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../contexts/AuthContext';
 import { Colors, Typography, Spacing } from '../constants/Design';
 
 interface TopNavigationProps {
   title: string;
   subtitle?: string;
+  showBackButton?: boolean;
+  onBackPress?: () => void;
+  showProfileDropdown?: boolean;
 }
 
-export default function TopNavigation({ title, subtitle }: TopNavigationProps) {
+export default function TopNavigation({ 
+  title, 
+  subtitle, 
+  showBackButton = false,
+  onBackPress,
+  showProfileDropdown: externalShowProfile = true
+}: TopNavigationProps) {
   const { user, logout } = useAuth();
+  const navigation = useNavigation();
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
   const insets = useSafeAreaInsets();
 
@@ -33,11 +44,25 @@ export default function TopNavigation({ title, subtitle }: TopNavigationProps) {
     // Navigate to profile screen if needed
   };
 
+  const handleFAQPress = () => {
+    setShowProfileDropdown(false);
+    navigation.navigate('FAQ' as never);
+  };
+
   return (
     <>
       <SafeAreaView edges={['top']} style={styles.container}>
         <View style={styles.header}>
-          <View style={styles.titleContainer}>
+          {showBackButton && (
+            <TouchableOpacity 
+              style={styles.backButton}
+              onPress={onBackPress}
+            >
+              <Ionicons name="arrow-back" size={24} color={Colors.text} />
+            </TouchableOpacity>
+          )}
+          
+          <View style={[styles.titleContainer, showBackButton && styles.titleWithBack]}>
             <Text style={styles.title}>{title}</Text>
             {subtitle && <Text style={styles.subtitle}>{subtitle}</Text>}
           </View>
@@ -83,6 +108,14 @@ export default function TopNavigation({ title, subtitle }: TopNavigationProps) {
             </View>
 
             <View style={styles.divider} />
+
+            <TouchableOpacity 
+              style={styles.dropdownItem}
+              onPress={handleFAQPress}
+            >
+              <Ionicons name="help-circle-outline" size={20} color={Colors.text} />
+              <Text style={styles.dropdownItemText}>FAQ</Text>
+            </TouchableOpacity>
 
             <TouchableOpacity 
               style={styles.dropdownItem}
@@ -229,6 +262,13 @@ const styles = StyleSheet.create({
   dropdownItemText: {
     fontSize: Typography.md,
     color: Colors.text,
+    flex: 1,
+  },
+  backButton: {
+    padding: Spacing.xs,
+    marginRight: Spacing.sm,
+  },
+  titleWithBack: {
     flex: 1,
   },
 });

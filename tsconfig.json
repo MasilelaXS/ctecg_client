@@ -3,17 +3,24 @@
   "compilerOptions": {
     "strict": true,
     "paths": {
-      "@/*": ["./*"],
-      "@/assest/*": ["./assets/*"],
-      "@/components/*": ["./components/*"],
-      "typeRoots": ["./node_modules/@types", "./app/types"]
+      "@/*": [
+        "./*"
+      ],
+      "@/assest/*": [
+        "./assets/*"
+      ],
+      "@/components/*": [
+        "./components/*"
+      ],
+      "typeRoots": [
+        "./node_modules/@types",
+        "./app/types"
+      ]
     }
   },
   "include": [
     "**/*.ts",
     "**/*.tsx",
-    ".expo/types/**/*.ts",
-    "expo-env.d.ts",
     "app/types/images.tsts"
   ]
 }
