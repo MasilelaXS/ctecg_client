@@ -85,9 +85,16 @@ class ApiService {
         console.error('API Error response:', data);
         
         // Handle 401 Unauthorized - token expired or invalid
-        if (response.status === 401 && this.onAuthFailure) {
-          console.log('🔴 Token expired/invalid, triggering logout');
-          this.onAuthFailure();
+        // Only trigger auto-logout for authenticated endpoints (when we have a token)
+        // and the error is specifically about token validation
+        if (response.status === 401 && this.authToken && this.onAuthFailure) {
+          // Check if this is a token validation failure (not a login attempt)
+          const isLoginAttempt = endpoint.includes('action=login') || endpoint.includes('action=register');
+          
+          if (!isLoginAttempt) {
+            console.log('🔴 Token expired/invalid, triggering logout');
+            this.onAuthFailure();
+          }
         }
         
         throw new Error(data.message || `HTTP ${response.status}`);
