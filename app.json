@@ -8,11 +8,6 @@
     "icon": "./assets/icon.png",
     "scheme": "ctecg",
     "userInterfaceStyle": "automatic",
-    "statusBar": {
-      "style": "dark",
-      "backgroundColor": "#ffffff",
-      "translucent": false
-    },
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -25,7 +20,6 @@
       "supportsTablet": false,
       "bundleIdentifier": "com.ctecg.mobile",
       "buildNumber": "1",
-      "statusBarStyle": "dark",
       "infoPlist": {
         "NSAppTransportSecurity": {
           "NSAllowsArbitraryLoads": true
@@ -43,11 +37,7 @@
         "android.permission.ACCESS_NETWORK_STATE"
       ],
       "package": "com.ctecg.mobile",
-      "versionCode": 1,
-      "statusBar": {
-        "barStyle": "dark-content",
-        "backgroundColor": "#ffffff"
-      }
+      "versionCode": 1
     },
     "web": {
       "bundler": "metro",
